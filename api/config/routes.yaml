@@ -1,5 +1,5 @@
-controllers:
+api_document:
     resource:
-        path: ../src/Controller/
-        namespace: App\Controller
+        path: ../src/Document/Infrastructure/Api/
+        namespace: App\Document\Infrastructure\Api
     type: attribute

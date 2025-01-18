@@ -17,8 +17,14 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Entity/'
             - '../src/Kernel.php'
+            - '../src/Document/Domain/Entity/'
+            - '../src/Document/Domain/Enum/'
+
+    _instanceof:
+        App\Shared\Application\Command\Sync\CommandHandler:
+            tags:
+                - { name: 'messenger.message_handler', bus: command.sync.bus }
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
