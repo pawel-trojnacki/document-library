@@ -1,0 +1,4 @@
+/.idea/
+/docker/volumes/
+/.env.local
+/.env.*.local
