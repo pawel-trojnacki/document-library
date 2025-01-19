@@ -21,6 +21,7 @@ class DeleteCategoryActionTest extends KernelTestCase
 
         $this->browser()
             ->delete('/categories/' . $category->getId())
+            ->assertContentType('application/json')
             ->assertSuccessful();
 
         $this->assertNull(CategoryFactory::repository()->find($category->getId()));
@@ -30,6 +31,7 @@ class DeleteCategoryActionTest extends KernelTestCase
     {
         $this->browser()
             ->delete('/categories/' . Uuid::v7())
+            ->assertContentType('application/json')
             ->assertStatus(404);
     }
 }

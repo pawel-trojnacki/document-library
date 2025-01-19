@@ -22,6 +22,7 @@ class CreateCategoryActionTest extends KernelTestCase
                     'name' => 'My category'
                 ],
             ])
+            ->assertContentType('application/json')
             ->assertSuccessful();
 
         $this->assertNotNull(CategoryFactory::repository()->findOneBy(['name' => 'My category']));
@@ -35,6 +36,7 @@ class CreateCategoryActionTest extends KernelTestCase
                     'name' => ''
                 ],
             ])
+            ->assertContentType('application/json')
             ->assertStatus(422);
     }
 }
