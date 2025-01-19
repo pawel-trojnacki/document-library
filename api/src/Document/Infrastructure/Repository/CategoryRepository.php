@@ -8,6 +8,7 @@ use App\Document\Domain\Entity\Category;
 use App\Document\Domain\Repository\CategoryRepository as RepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<Category>
@@ -27,5 +28,10 @@ final class CategoryRepository extends ServiceEntityRepository implements Reposi
     public function remove(Category $category): void
     {
         $this->getEntityManager()->remove($category);
+    }
+
+    public function findById(Uuid $id): ?Category
+    {
+        return $this->find($id);
     }
 }
