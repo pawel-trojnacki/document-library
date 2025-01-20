@@ -36,6 +36,11 @@ final class FileService implements FileServiceInterface
         return new StoredFileDto($fileType, $subDir . '/' . $fileName, $originalName);
     }
 
+    public function getUploadDir(): string
+    {
+        return $this->uploadDir;
+    }
+
     private function getSubDir(): string
     {
         return date('Y/m');

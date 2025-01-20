@@ -10,4 +10,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 interface FileService
 {
     public function upload(UploadedFile $file): StoredFileDto;
+
+    public function getUploadDir(): string;
 }
