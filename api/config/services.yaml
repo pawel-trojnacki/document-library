@@ -26,6 +26,9 @@ services:
         App\Shared\Application\Command\Sync\CommandHandler:
             tags:
                 - { name: 'messenger.message_handler', bus: command.sync.bus }
+        App\Shared\Application\Event\Sync\EventHandler:
+            tags:
+                - { name: 'messenger.message_handler', bus: event.sync.bus }
 
     App\Document\Infrastructure\Service\FileService:
         arguments:

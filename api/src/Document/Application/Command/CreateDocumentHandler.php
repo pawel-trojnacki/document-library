@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace App\Document\Application\Command;
 
+use App\Document\Application\Event\DocumentCreated;
 use App\Document\Domain\Entity\Document;
 use App\Document\Domain\Repository\CategoryRepository;
 use App\Document\Domain\Repository\DocumentRepository;
 use App\Shared\Application\Command\Sync\CommandHandler;
+use App\Shared\Application\Event\Sync\EventBus;
 
 final class CreateDocumentHandler implements CommandHandler
 {
     public function __construct(
         private CategoryRepository $categoryRepository,
         private DocumentRepository $documentRepository,
+        private EventBus $eventBus,
     ) {
     }
 
@@ -35,5 +38,7 @@ final class CreateDocumentHandler implements CommandHandler
         );
 
         $this->documentRepository->save($document);
+
+        $this->eventBus->dispatch(new DocumentCreated($document->getId()));
     }
 }
