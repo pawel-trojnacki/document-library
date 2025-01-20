@@ -27,7 +27,10 @@ final class DocumentCreatedHandler implements EventHandler
 
         $fileReader = $this->fileReaderProvider->getReader($document->getFileType());
         if ($fileReader !== null) {
-            $content = $fileReader->getText($this->fileService->getUploadDir() . '/' . $document->getFilePath());
+            $content = $fileReader->getText(
+                $this->fileService->getUploadDir() . '/' . $document->getFilePath(),
+                $document->getFileType()
+            );
             $document->setContent($content);
             $this->documentRepository->save($document);
         }

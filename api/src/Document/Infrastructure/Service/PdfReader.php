@@ -14,7 +14,7 @@ final class PdfReader implements FileReader
     {
     }
 
-    public function getText(string $path): ?string
+    public function getText(string $path, FileType $type): ?string
     {
         try {
             $file = $this->parser->parseFile($path);
