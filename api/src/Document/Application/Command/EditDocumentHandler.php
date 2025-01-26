@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Document\Application\Command;
 
-use App\Document\Application\Service\FileService;
 use App\Document\Domain\Repository\CategoryRepository;
 use App\Document\Domain\Repository\DocumentRepository;
 use App\Shared\Application\Command\Sync\CommandHandler;

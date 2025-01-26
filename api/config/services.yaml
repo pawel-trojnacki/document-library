@@ -5,6 +5,10 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     upload_dir: '%env(UPLOAD_DIR)%'
+    elastic_host: '%env(ELASTIC_HOST)%'
+    elastic_port: '%env(ELASTIC_PORT)%'
+    elastic_user: '%env(ELASTIC_USER)%'
+    elastic_password: '%env(ELASTIC_PASSWORD)%'
 
 services:
     # default configuration for services in *this* file
@@ -46,6 +50,13 @@ services:
             $parser: '@Smalot\PdfParser\Parser'
 
     Smalot\PdfParser\Parser: ~
+
+    App\Shared\Infrastructure\Factory\ElasticsearchClientFactory:
+        arguments:
+            $host: '%elastic_host%'
+            $port: '%elastic_port%'
+            $user: '%elastic_user%'
+            $password: '%elastic_password%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

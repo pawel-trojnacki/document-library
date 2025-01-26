@@ -7,6 +7,7 @@ namespace App\Document\Application\Event;
 use App\Document\Application\Service\FileReaderProvider;
 use App\Document\Application\Service\FileService;
 use App\Document\Domain\Repository\DocumentRepository;
+use App\Shared\Application\Event\Sync\EventBus;
 use App\Shared\Application\Event\Sync\EventHandler;
 
 final class DocumentCreatedHandler implements EventHandler
@@ -15,6 +16,7 @@ final class DocumentCreatedHandler implements EventHandler
         private DocumentRepository $documentRepository,
         private FileReaderProvider $fileReaderProvider,
         private FileService $fileService,
+        private EventBus $eventBus,
     ) {
     }
 
@@ -34,5 +36,7 @@ final class DocumentCreatedHandler implements EventHandler
             $document->setContent($content);
             $this->documentRepository->save($document);
         }
+
+        $this->eventBus->dispatch(new DocumentParsed($document->getId()));
     }
 }

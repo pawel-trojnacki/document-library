@@ -2,16 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Document\Domain\Repository;
+namespace App\Document\Application\Indexer;
 
 use App\Document\Domain\Entity\Document;
-use Symfony\Component\Uid\Uuid;
 
-interface DocumentRepository
+interface DocumentIndexer
 {
     public function save(Document $document): void;
 
     public function remove(Document $document): void;
-
-    public function findById(Uuid $id): ?Document;
 }
