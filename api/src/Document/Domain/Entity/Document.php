@@ -83,6 +83,11 @@ class Document
         return $this->updatedAt;
     }
 
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
     public function getCategory(): ?Category
     {
         return $this->category;

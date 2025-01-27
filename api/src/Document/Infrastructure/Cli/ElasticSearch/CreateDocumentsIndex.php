@@ -46,7 +46,10 @@ final class CreateDocumentsIndex extends Command
                             'type' => 'date',
                             'format' => 'strict_date_time',
                         ],
-                        'category' => [
+                        'categoryId' => [
+                            'type' => 'keyword',
+                        ],
+                        'categoryName' => [
                             'type' => 'keyword',
                         ],
                         'name' => [

@@ -8,7 +8,7 @@ use App\Document\Application\Projection\DocumentProjection;
 use App\Document\Domain\Repository\DocumentRepository;
 use App\Shared\Application\Event\Sync\EventHandler;
 
-final class DocumentParsedHandler implements EventHandler
+final class DocumentDeletedHandler implements EventHandler
 {
     public function __construct(
         private DocumentRepository $documentRepository,
@@ -16,13 +16,13 @@ final class DocumentParsedHandler implements EventHandler
     ) {
     }
 
-    public function __invoke(DocumentParsed $event): void
+    public function __invoke(DocumentDeleted $event): void
     {
         $document = $this->documentRepository->findById($event->id);
         if ($document === null) {
             return;
         }
 
-        $this->documentProjection->save($document);
+        $this->documentProjection->remove($document);
     }
 }
