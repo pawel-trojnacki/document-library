@@ -9,6 +9,7 @@ use App\Document\Application\Transformer\DocumentToArrayTransformer;
 use App\Document\Domain\Entity\Document;
 use App\Shared\Infrastructure\Factory\ElasticsearchClientFactory;
 use Elastic\Elasticsearch\Client;
+use Symfony\Component\Uid\Uuid;
 
 final class DocumentProjection implements ProjectionInterface
 {
@@ -46,6 +47,23 @@ final class DocumentProjection implements ProjectionInterface
         $this->client->delete([
             'index' => self::INDEX,
             'id' => (string) $document->getId(),
+        ]);
+    }
+
+    public function bulkRemoveCategory(Uuid $categoryId): void
+    {
+        $this->client->updateByQuery([
+            'index' => self::INDEX,
+            'body' => [
+                'script' => [
+                    'source' => 'ctx._source.categoryId = null; ctx._source.categoryName = null;',
+                ],
+                'query' => [
+                    'term' => [
+                        'categoryId' => (string) $categoryId,
+                    ],
+                ],
+            ],
         ]);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Document\Application\Projection;
 
 use App\Document\Domain\Entity\Document;
+use Symfony\Component\Uid\Uuid;
 
 interface DocumentProjection
 {
@@ -13,4 +14,6 @@ interface DocumentProjection
     public function edit(Document $document): void;
 
     public function remove(Document $document): void;
+
+    public function bulkRemoveCategory(Uuid $categoryId): void;
 }

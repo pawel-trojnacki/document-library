@@ -26,6 +26,7 @@ class Document
     private \DateTimeImmutable $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
     private ?Category $category;
 
     #[ORM\Column(length: 120)]
