@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Document\Api;
 
-use App\Document\Application\Projection\DocumentProjection;
 use App\Document\Infrastructure\Fixtures\DocumentFactory;
+use App\Document\Infrastructure\Projection\DocumentIndex;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Uid\Uuid;
 use Zenstruck\Browser\Test\HasBrowser;
 use Zenstruck\Foundry\Test\Factories;
@@ -17,18 +16,25 @@ class EditDocumentActionTest extends KernelTestCase
 {
     use Factories, ResetDatabase, HasBrowser;
 
-    private DocumentProjection $projection;
+    private DocumentIndex $documentIndex;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->projection = self::getContainer()->get(DocumentProjection::class);
+
+        $this->documentIndex = self::getContainer()->get(DocumentIndex::class);
+        $this->documentIndex->create();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $this->documentIndex->delete();
     }
 
     public function test_is_document_updated(): void
     {
         $document = DocumentFactory::new()->create();
-        $this->projection->save($document);
 
         $this->browser()
             ->patch('/documents/' . $document->getId(), [
@@ -42,8 +48,6 @@ class EditDocumentActionTest extends KernelTestCase
         $updatedDocument = DocumentFactory::repository()->findOneBy(['id' => $document->getId()]);
         $this->assertSame('Updated Document', $updatedDocument->getName());
         $this->assertSame('Updated description.', $updatedDocument->getDescription());
-
-        $this->projection->remove($document);
     }
 
     public function test_is_error_when_data_is_invalid(): void

@@ -6,6 +6,7 @@ namespace App\Document\Infrastructure\Fixtures;
 
 use App\Document\Domain\Entity\Document;
 use App\Document\Domain\Enum\FileType;
+use App\Document\Infrastructure\Projection\DocumentProjection;
 use Symfony\Component\Uid\Uuid;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
@@ -14,6 +15,11 @@ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
  */
 final class DocumentFactory extends PersistentProxyObjectFactory
 {
+    public function __construct(private DocumentProjection $projection)
+    {
+        parent::__construct();
+    }
+
     public static function class(): string
     {
         return Document::class;
@@ -31,5 +37,12 @@ final class DocumentFactory extends PersistentProxyObjectFactory
             'description' => self::faker()->sentence(),
             'content' => self::faker()->text(),
         ];
+    }
+
+    protected function initialize(): static
+    {
+        return $this->afterInstantiate(function (Document $document): void {
+            $this->projection->save($document);
+        });
     }
 }

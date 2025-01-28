@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Document\Api;
 
-use App\Document\Application\Projection\DocumentProjection;
 use App\Document\Infrastructure\Fixtures\DocumentFactory;
+use App\Document\Infrastructure\Projection\DocumentIndex;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Zenstruck\Browser\Test\HasBrowser;
@@ -16,12 +16,14 @@ class CreateDocumentActionTest extends KernelTestCase
 {
     use Factories, ResetDatabase, HasBrowser;
 
-    private DocumentProjection $projection;
+    private DocumentIndex $documentIndex;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->projection = self::getContainer()->get(DocumentProjection::class);
+
+        $this->documentIndex = self::getContainer()->get(DocumentIndex::class);
+        $this->documentIndex->create();
 
         $uploadDir = sys_get_temp_dir() . '/uploads';
         if (!is_dir($uploadDir)) {
@@ -32,6 +34,7 @@ class CreateDocumentActionTest extends KernelTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
+        $this->documentIndex->delete();
         $this->deleteDirectory(sys_get_temp_dir() . '/uploads');
     }
 
@@ -56,8 +59,6 @@ class CreateDocumentActionTest extends KernelTestCase
 
         $document = DocumentFactory::repository()->findOneBy(['name' => 'Sample Document']);
         $this->assertNotNull($document);
-
-        $this->projection->remove($document);
     }
 
     public function test_is_error_when_file_is_missing(): void

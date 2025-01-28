@@ -15,10 +15,10 @@ final class DocumentToArrayTransformer
     {
         return [
             'id' => (string) $document->getId(),
-            'createdAt' => $document->getCreatedAt()->format(\DateTimeImmutable::ATOM),
-            'updatedAt' => $document->getUpdatedAt()->format(\DateTimeImmutable::ATOM),
-            'categoryId' => $document->getCategory()?->getId() ?? null,
-            'categoryName' => $document->getCategory()?->getName() ?? null,
+            'createdAt' => $document->getCreatedAt()->format(\DateTimeInterface::ATOM),
+            'updatedAt' => $document->getUpdatedAt()->format(\DateTimeInterface::ATOM),
+            'categoryId' => $document->getCategory()?->getId(),
+            'categoryName' => $document->getCategory()?->getName(),
             'name' => $document->getName(),
             'fileType' => $document->getFileType()->value,
             'filePath' => $document->getFilePath(),

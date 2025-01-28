@@ -2,36 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Document\Infrastructure\Cli\ElasticSearch;
+namespace App\Document\Infrastructure\Projection;
 
-use App\Shared\Infrastructure\Factory\ElasticsearchClientFactory;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use App\Shared\Infrastructure\Elasticsearch\ElasticsearchClientInterface;
 
-#[AsCommand(
-    name: 'app:es-documents-create-index',
-    description: 'Create Elasticsearch documents index'
-)]
-final class CreateDocumentsIndex extends Command
+final class DocumentIndex
 {
+    public const INDEX = 'documents';
+
     public function __construct(
-        private ElasticsearchClientFactory $clientFactory,
+        private ElasticsearchClientInterface $client,
     ) {
-        parent::__construct();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function create(): void
     {
-        $output->writeln('Creating documents index...');
-
-        $client = $this->clientFactory->create();
-
-        $indexName = 'documents';
-        $params = [
-            'index' => $indexName,
-            'body' => [
+        if (!$this->client->indexExists(self::INDEX)) {
+            $this->client->createIndex(self::INDEX, [
                 'mappings' => [
                     'dynamic' => 'strict',
                     'properties' => [
@@ -75,18 +62,12 @@ final class CreateDocumentsIndex extends Command
                         ],
                     ],
                 ],
-            ],
-        ];
-
-        try {
-            $client->indices()->create($params);
-        } catch (\Exception $e) {
-            $output->writeln($e->getMessage());
-            return Command::FAILURE;
+            ]);
         }
+    }
 
-        $output->writeln('Documents index created successfully');
-
-        return Command::SUCCESS;
+    public function delete(): void
+    {
+        $this->client->deleteIndex(self::INDEX);
     }
 }

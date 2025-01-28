@@ -7,54 +7,45 @@ namespace App\Document\Infrastructure\Projection;
 use App\Document\Application\Projection\DocumentProjection as ProjectionInterface;
 use App\Document\Application\Transformer\DocumentToArrayTransformer;
 use App\Document\Domain\Entity\Document;
-use App\Shared\Infrastructure\Factory\ElasticsearchClientFactory;
-use Elastic\Elasticsearch\Client;
+use App\Shared\Infrastructure\Elasticsearch\ElasticsearchClientInterface;
 use Symfony\Component\Uid\Uuid;
 
 final class DocumentProjection implements ProjectionInterface
 {
-    private const INDEX = 'documents';
-
-    private Client $client;
-
     public function __construct(
         private DocumentToArrayTransformer $transformer,
-        ElasticsearchClientFactory $clientFactory,
+        private ElasticsearchClientInterface $client,
     ) {
-        $this->client = $clientFactory->create();
     }
 
     public function save(Document $document): void
     {
-        $this->client->index([
-            'index' => self::INDEX,
-            'id' => (string) $document->getId(),
-            'body' => $this->transformer->transform($document),
-        ]);
+        $this->client->save(
+            DocumentIndex::INDEX,
+            (string) $document->getId(),
+            $this->transformer->transform($document)
+        );
     }
 
     public function edit(Document $document): void
     {
-        $this->client->update([
-            'index' => self::INDEX,
-            'id' => (string) $document->getId(),
-            'body' => $this->transformer->transform($document),
-        ]);
+        $this->client->update(
+            DocumentIndex::INDEX,
+            (string) $document->getId(),
+            $this->transformer->transform($document)
+        );
     }
 
     public function remove(Document $document): void
     {
-        $this->client->delete([
-            'index' => self::INDEX,
-            'id' => (string) $document->getId(),
-        ]);
+        $this->client->delete(DocumentIndex::INDEX, (string) $document->getId());
     }
 
     public function bulkRemoveCategory(Uuid $categoryId): void
     {
-        $this->client->updateByQuery([
-            'index' => self::INDEX,
-            'body' => [
+        $this->client->updateByQuery(
+            DocumentIndex::INDEX,
+            [
                 'script' => [
                     'source' => 'ctx._source.categoryId = null; ctx._source.categoryName = null;',
                 ],
@@ -64,6 +55,6 @@ final class DocumentProjection implements ProjectionInterface
                     ],
                 ],
             ],
-        ]);
+        );
     }
 }
