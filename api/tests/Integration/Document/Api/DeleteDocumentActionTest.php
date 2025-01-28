@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Document\Api;
 
+use App\Document\Application\Projection\DocumentProjection;
 use App\Document\Infrastructure\Fixtures\DocumentFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Uid\Uuid;
@@ -15,9 +16,18 @@ class DeleteDocumentActionTest extends KernelTestCase
 {
     use Factories, ResetDatabase, HasBrowser;
 
+    private DocumentProjection $projection;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->projection = self::getContainer()->get(DocumentProjection::class);
+    }
+
     public function test_is_document_deleted(): void
     {
         $document = DocumentFactory::new()->create();
+        $this->projection->save($document);
 
         $this->browser()
             ->delete('/documents/' . $document->getId())
