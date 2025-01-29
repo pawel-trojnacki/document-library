@@ -45,6 +45,13 @@ final class ElasticsearchClient implements ElasticsearchClientInterface
         ])->asBool();
     }
 
+    public function refresh(string $index): void
+    {
+        $this->client->indices()->refresh([
+            'index' => $this->prepareIndexName($index),
+        ]);
+    }
+
     /*
      * @param mixed[] $body
      */
@@ -88,6 +95,18 @@ final class ElasticsearchClient implements ElasticsearchClientInterface
             'index' => $this->prepareIndexName($index),
             'id' => $id,
         ]);
+    }
+
+    /**
+     * @param mixed[] $body
+     * @return mixed[]
+     */
+    public function search(string $index, array $body): array
+    {
+        return $this->client->search([
+            'index' => $this->prepareIndexName($index),
+            'body' => $body,
+        ])->asArray();
     }
 
     private function prepareIndexName(string $index): string

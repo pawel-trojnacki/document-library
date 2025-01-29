@@ -15,6 +15,8 @@ interface ElasticsearchClientInterface
 
     public function indexExists(string $index): bool;
 
+    public function refresh(string $index): void;
+
     /*
      * @param mixed[] $body
      */
@@ -31,4 +33,10 @@ interface ElasticsearchClientInterface
     public function updateByQuery(string $index, array $body): void;
 
     public function delete(string $index, string $id): void;
+
+    /**
+     * @param mixed[] $body
+     * @return mixed[]
+     */
+    public function search(string $index, array $body): array;
 }

@@ -25,6 +25,7 @@ services:
             - '../src/Kernel.php'
             - '../src/Document/Domain/Entity/'
             - '../src/Document/Domain/Enum/'
+            - '../src/Document/Application/View/'
 
     _instanceof:
         App\Shared\Application\Command\Sync\CommandHandler:

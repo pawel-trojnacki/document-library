@@ -70,4 +70,9 @@ final class DocumentIndex
     {
         $this->client->deleteIndex(self::INDEX);
     }
+
+    public function refresh(): void
+    {
+        $this->client->refresh(self::INDEX);
+    }
 }
