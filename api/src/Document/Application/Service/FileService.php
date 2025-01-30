@@ -11,5 +11,9 @@ interface FileService
 {
     public function upload(UploadedFile $file): StoredFileDto;
 
+    public function delete(string $filePath): void;
+
     public function getUploadDir(): string;
+
+    public function getStoredFilePath(string $path): ?string;
 }

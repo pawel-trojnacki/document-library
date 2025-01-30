@@ -51,11 +51,6 @@ final class ExceptionListener
             );
         }
 
-        return new JsonResponse([
-            'message' => $e->getMessage(),
-            'trace' => $e->getTrace(),
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
-
         return null;
     }
 }

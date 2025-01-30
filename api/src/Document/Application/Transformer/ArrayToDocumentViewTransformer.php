@@ -25,8 +25,8 @@ final class ArrayToDocumentViewTransformer
     {
         return new DocumentView(
             id: $data['id'],
-            createdAt: $data['createdAt'],
-            updatedAt: $data['updatedAt'],
+            createdAt: (new \DateTimeImmutable($data['createdAt']))->format('Y-m-d H:i'),
+            updatedAt: (new \DateTimeImmutable($data['updatedAt']))->format('Y-m-d H:i'),
             fileType: $data['fileType'],
             originalName: $data['originalName'],
             name: $data['name'],

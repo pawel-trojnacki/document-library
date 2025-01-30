@@ -49,6 +49,16 @@ final class FileService implements FileServiceInterface
         return $this->uploadDir;
     }
 
+    public function getStoredFilePath(string $path): ?string
+    {
+        $filePath = $this->uploadDir . '/' . $path;
+        if (!file_exists($filePath)) {
+            return null;
+        }
+
+        return $filePath;
+    }
+
     private function getSubDir(): string
     {
         return date('Y/m');
