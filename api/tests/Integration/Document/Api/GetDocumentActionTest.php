@@ -4,6 +4,7 @@ namespace App\Tests\Integration\Document\Api;
 
 use App\Document\Infrastructure\Api\GetDocumentAction;
 use App\Document\Infrastructure\Fixtures\DocumentFactory;
+use App\Document\Infrastructure\Projection\DocumentIndex;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Uid\Uuid;
@@ -14,6 +15,22 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 class GetDocumentActionTest extends KernelTestCase
 {
     use Factories, ResetDatabase, HasBrowser;
+
+    private DocumentIndex $documentIndex;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->documentIndex = self::getContainer()->get(DocumentIndex::class);
+        $this->documentIndex->create();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $this->documentIndex->delete();
+    }
 
     public function test_is_document_provided(): void
     {

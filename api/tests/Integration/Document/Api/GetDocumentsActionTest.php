@@ -41,8 +41,6 @@ class GetDocumentsActionTest extends KernelTestCase
             ->get('/documents')
             ->assertSuccessful()
             ->assertJsonMatches('total', 3);
-
-        $this->assertTrue(true);
     }
 
     public function test_are_documents_searched(): void

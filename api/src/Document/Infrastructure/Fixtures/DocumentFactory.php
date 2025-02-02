@@ -6,9 +6,7 @@ namespace App\Document\Infrastructure\Fixtures;
 
 use App\Document\Domain\Entity\Document;
 use App\Document\Domain\Enum\FileType;
-use App\Document\Infrastructure\Projection\DocumentIndex;
 use App\Document\Infrastructure\Projection\DocumentProjection;
-use App\Shared\Infrastructure\Elasticsearch\ElasticsearchClientInterface;
 use Symfony\Component\Uid\Uuid;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
@@ -19,7 +17,6 @@ final class DocumentFactory extends PersistentProxyObjectFactory
 {
     public function __construct(
         private DocumentProjection $projection,
-        private ElasticsearchClientInterface $client,
     ) {
         parent::__construct();
     }
@@ -46,9 +43,7 @@ final class DocumentFactory extends PersistentProxyObjectFactory
     protected function initialize(): static
     {
         return $this->afterInstantiate(function (Document $document): void {
-            if ($this->client->indexExists(DocumentIndex::INDEX) === false) {
-                $this->projection->save($document);
-            }
+            $this->projection->save($document);
         });
     }
 }

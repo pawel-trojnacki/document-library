@@ -40,7 +40,7 @@ services:
 
     App\Document\Application\Service\FileReaderProvider:
         arguments:
-            $readers: !tagged app.file_reader
+            $readers: !tagged_iterator app.file_reader
 
     App\Document\Infrastructure\Service\FileService:
         arguments:
