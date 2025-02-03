@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Infrastructure\Listener;
 
+use App\Shared\Application\Exception\RuntimeException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,6 +50,10 @@ final class ExceptionListener
                 ['message' => 'Validation failed', 'errors' => $errors],
                 RESPONSE::HTTP_UNPROCESSABLE_ENTITY,
             );
+        }
+
+        if ($e instanceof RuntimeException) {
+            return new JsonResponse(['message' => $e->getMessage()], $e->getCode());
         }
 
         return null;

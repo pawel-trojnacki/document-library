@@ -38,6 +38,11 @@ final class UserRepository extends ServiceEntityRepository implements Repository
         return $this->find($id);
     }
 
+    public function findOneByEmail(string $email): ?User
+    {
+        return $this->findOneBy(['email' => $email]);
+    }
+
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof User) {

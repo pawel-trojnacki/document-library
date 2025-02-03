@@ -1,0 +1,26 @@
+App\User\Application\Dto\CreateUserDto:
+    properties:
+        role:
+            - NotBlank: ~
+            - Choice:
+                choices: [ROLE_ADMIN, ROLE_USER]
+        email:
+            - NotBlank: ~
+            - Email: ~
+            - Length:
+                max: 180
+        firstName:
+            - NotBlank: ~
+            - Length:
+                min: 3
+                max: 80
+        lastName:
+            - NotBlank: ~
+            - Length:
+                min: 3
+                max: 80
+        password:
+            - NotBlank: ~
+            - Length:
+                min: 8
+                max: 255

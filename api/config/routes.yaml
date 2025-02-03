@@ -3,3 +3,8 @@ api_document:
         path: ../src/Document/Infrastructure/Api/
         namespace: App\Document\Infrastructure\Api
     type: attribute
+api_user:
+    resource:
+        path: ../src/User/Infrastructure/Api/
+        namespace: App\User\Infrastructure\Api
+    type: attribute
