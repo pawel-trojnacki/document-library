@@ -24,3 +24,20 @@ App\User\Application\Dto\CreateUserDto:
             - Length:
                 min: 8
                 max: 255
+
+App\User\Application\Dto\EditUserDto:
+    properties:
+        role:
+            - NotBlank: ~
+            - Choice:
+                  choices: [ROLE_ADMIN, ROLE_USER]
+        firstName:
+            - NotBlank: ~
+            - Length:
+                  min: 3
+                  max: 80
+        lastName:
+            - NotBlank: ~
+            - Length:
+                  min: 3
+                  max: 80

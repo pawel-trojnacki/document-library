@@ -13,15 +13,12 @@ use Symfony\Component\Uid\Uuid;
 
 readonly class EditDocument implements Command
 {
-    public Uuid $id;
-
     public function __construct(
         public Document $document,
         public ?Uuid $categoryId,
         public string $name,
         public ?string $description,
     ) {
-        $this->id = Uuid::v7();
     }
 
     public static function create(Document $document, DocumentDto $documentDto): self
