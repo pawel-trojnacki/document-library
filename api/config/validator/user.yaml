@@ -23,7 +23,7 @@ App\User\Application\Dto\CreateUserDto:
             - NotBlank: ~
             - Length:
                 min: 8
-                max: 255
+                max: 64
 
 App\User\Application\Dto\EditUserDto:
     properties:
@@ -41,3 +41,11 @@ App\User\Application\Dto\EditUserDto:
             - Length:
                   min: 3
                   max: 80
+
+App\User\Application\Dto\ChangePasswordDto:
+    properties:
+        password:
+            - NotBlank: ~
+            - Length:
+                min: 8
+                max: 64
