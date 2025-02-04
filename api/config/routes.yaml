@@ -1,3 +1,5 @@
+api_login_check:
+    path: /login-check
 api_document:
     resource:
         path: ../src/Document/Infrastructure/Api/

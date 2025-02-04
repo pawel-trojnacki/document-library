@@ -9,8 +9,10 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 
 #[AsEventListener]
@@ -30,6 +32,10 @@ final class ExceptionListener
     {
         if ($e instanceof NotFoundHttpException) {
             return new JsonResponse(['message' => $e->getMessage()], $e->getStatusCode());
+        }
+
+        if ($e instanceof AccessDeniedHttpException || $e instanceof AccessDeniedException) {
+            return new JsonResponse(['message' => 'Access denied'], Response::HTTP_FORBIDDEN);
         }
 
         if ($e instanceof UnprocessableEntityHttpException && $e->getPrevious() instanceof ValidationFailedException) {

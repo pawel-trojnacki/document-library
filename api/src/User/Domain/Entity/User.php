@@ -86,6 +86,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return [$this->role->value];
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRole::ADMIN;
+    }
+
     public function getEmail(): ?string
     {
         return $this->email;
