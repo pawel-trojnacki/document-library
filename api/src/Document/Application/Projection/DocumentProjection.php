@@ -15,5 +15,9 @@ interface DocumentProjection
 
     public function remove(Document $document): void;
 
+    public function bulkRefreshAuthor(Uuid $authorId, string $authorName): void;
+
+    public function bulkRemoveAuthor(Uuid $authorId): void;
+
     public function bulkRemoveCategory(Uuid $categoryId): void;
 }

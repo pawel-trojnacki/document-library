@@ -23,6 +23,6 @@ final class DocumentEditedHandler implements EventHandler
             return;
         }
 
-        $this->documentProjection->save($document);
+        $this->documentProjection->edit($document);
     }
 }

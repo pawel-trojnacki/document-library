@@ -41,6 +41,43 @@ final class DocumentProjection implements ProjectionInterface
         $this->client->delete(DocumentIndex::INDEX, (string) $document->getId());
     }
 
+    public function bulkRefreshAuthor(Uuid $authorId, string $authorName): void
+    {
+        $this->client->updateByQuery(
+            DocumentIndex::INDEX,
+            [
+                'script' => [
+                    'source' => 'ctx._source.authorName = params.authorName;',
+                    'params' => [
+                        'authorName' => $authorName,
+                    ],
+                ],
+                'query' => [
+                    'term' => [
+                        'authorId' => (string) $authorId,
+                    ],
+                ],
+            ],
+        );
+    }
+
+    public function bulkRemoveAuthor(Uuid $authorId): void
+    {
+        $this->client->updateByQuery(
+            DocumentIndex::INDEX,
+            [
+                'script' => [
+                    'source' => 'ctx._source.authorId = null; ctx._source.authorName = null;',
+                ],
+                'query' => [
+                    'term' => [
+                        'authorId' => (string) $authorId,
+                    ],
+                ],
+            ],
+        );
+    }
+
     public function bulkRemoveCategory(Uuid $categoryId): void
     {
         $this->client->updateByQuery(

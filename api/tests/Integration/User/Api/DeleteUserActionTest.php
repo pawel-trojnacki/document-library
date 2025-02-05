@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\User\Api;
 
+use App\Document\Infrastructure\Projection\DocumentIndex;
 use App\User\Domain\Enum\UserRole;
 use App\User\Infrastructure\Fixtures\UserFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -16,7 +17,23 @@ class DeleteUserActionTest extends KernelTestCase
 {
     use Factories, ResetDatabase, HasBrowser;
 
-    public function test_is_password_changed(): void
+    private DocumentIndex $documentIndex;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->documentIndex = self::getContainer()->get(DocumentIndex::class);
+        $this->documentIndex->create();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $this->documentIndex->delete();
+    }
+
+    public function test_is_user_deleted(): void
     {
         $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
         $user = UserFactory::createOne();

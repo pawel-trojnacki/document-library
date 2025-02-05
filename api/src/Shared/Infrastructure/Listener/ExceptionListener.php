@@ -62,6 +62,8 @@ final class ExceptionListener
             return new JsonResponse(['message' => $e->getMessage()], $e->getCode());
         }
 
+        return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+
         return null;
     }
 }

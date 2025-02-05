@@ -26,7 +26,7 @@ class DocumentEditedHandlerTest extends TestCase
             ->willReturn($document);
 
         $documentProjection->expects($this->once())
-            ->method('save')
+            ->method('edit')
             ->with($document);
 
         $handler(new DocumentEdited(Uuid::v7()));
