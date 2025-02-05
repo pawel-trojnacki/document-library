@@ -18,6 +18,7 @@ class EditUserActionTest extends KernelTestCase
 
     public function test_is_user_edited(): void
     {
+        $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
         $user = UserFactory::createOne([
             'role' => UserRole::USER,
             'firstName' => 'John',
@@ -25,6 +26,7 @@ class EditUserActionTest extends KernelTestCase
         ]);
 
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->patch('users/' . $user->getId(), [
                 'json' => [
                     'role' => 'ROLE_ADMIN',
@@ -42,7 +44,10 @@ class EditUserActionTest extends KernelTestCase
 
     public function test_is_error_when_user_does_not_exist(): void
     {
+        $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
+
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->patch('users/' . Uuid::v7(), [
                 'json' => [
                     'role' => 'ROLE_ADMIN',
@@ -55,9 +60,11 @@ class EditUserActionTest extends KernelTestCase
 
     public function test_is_error_when_data_is_not_valid(): void
     {
+        $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
         $user = UserFactory::createOne();
 
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->patch('users/' . $user->getId(), [
                 'json' => [
                     'role' => 'ROLE_ADMIN',

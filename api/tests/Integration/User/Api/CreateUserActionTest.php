@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\User\Api;
 
+use App\User\Domain\Enum\UserRole;
 use App\User\Infrastructure\Fixtures\UserFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Browser\Test\HasBrowser;
@@ -16,7 +17,10 @@ class CreateUserActionTest extends KernelTestCase
 
     public function test_is_user_created(): void
     {
+        $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
+
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->post('/users', [
                 'json' => [
                     'role' => 'ROLE_ADMIN',
@@ -34,7 +38,10 @@ class CreateUserActionTest extends KernelTestCase
 
     public function test_is_error_when_data_is_invalid(): void
     {
+        $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
+
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->post('/users', [
                 'json' => [
                     'role' => 'ROLE_ADMIN',
@@ -52,9 +59,11 @@ class CreateUserActionTest extends KernelTestCase
 
     public function test_is_error_when_user_already_exists(): void
     {
+        $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
         UserFactory::createOne(['email' => 'test@test.com']);
 
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->post('/users', [
                 'json' => [
                     'role' => 'ROLE_ADMIN',

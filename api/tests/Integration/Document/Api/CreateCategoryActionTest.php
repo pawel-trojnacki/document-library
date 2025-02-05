@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Document\Api;
 
 use App\Document\Infrastructure\Fixtures\CategoryFactory;
+use App\User\Domain\Enum\UserRole;
+use App\User\Infrastructure\Fixtures\UserFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Browser\Test\HasBrowser;
 use Zenstruck\Foundry\Test\Factories;
@@ -16,7 +18,10 @@ class CreateCategoryActionTest extends KernelTestCase
 
     public function test_is_category_created(): void
     {
+        $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
+
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->post('/categories', [
                 'json' => [
                     'name' => 'My category'
@@ -30,7 +35,10 @@ class CreateCategoryActionTest extends KernelTestCase
 
     public function is_error_when_data_is_invalid(): void
     {
+        $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
+
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->post('/categories', [
                 'json' => [
                     'name' => ''

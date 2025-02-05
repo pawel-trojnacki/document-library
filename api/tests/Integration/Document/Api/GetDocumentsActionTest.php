@@ -7,6 +7,7 @@ namespace App\Tests\Integration\Document\Api;
 use App\Document\Infrastructure\Fixtures\CategoryFactory;
 use App\Document\Infrastructure\Fixtures\DocumentFactory;
 use App\Document\Infrastructure\Projection\DocumentIndex;
+use App\User\Infrastructure\Fixtures\UserFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Browser\Test\HasBrowser;
 use Zenstruck\Foundry\Test\Factories;
@@ -34,10 +35,12 @@ class GetDocumentsActionTest extends KernelTestCase
 
     public function test_are_documents_provided(): void
     {
+        $authenticatedUser = UserFactory::createOne();
         DocumentFactory::createMany(3);
         $this->documentIndex->refresh();
 
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->get('/documents')
             ->assertSuccessful()
             ->assertJsonMatches('total', 3);
@@ -45,6 +48,8 @@ class GetDocumentsActionTest extends KernelTestCase
 
     public function test_are_documents_searched(): void
     {
+        $authenticatedUser = UserFactory::createOne();
+
         DocumentFactory::createOne(
             ['name' => 'First Document', 'description' => 'Irrelevant description.', 'content' => 'Content.']
         );
@@ -59,6 +64,7 @@ class GetDocumentsActionTest extends KernelTestCase
         $this->documentIndex->refresh();
 
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->get('/documents?search=Document')
             ->assertSuccessful()
             ->assertJsonMatches('total', 3)
@@ -70,6 +76,8 @@ class GetDocumentsActionTest extends KernelTestCase
 
     public function test_are_documents_filtered_by_category(): void
     {
+        $authenticatedUser = UserFactory::createOne();
+
         $category1 = CategoryFactory::createOne();
         $category2 = CategoryFactory::createOne();
 
@@ -80,6 +88,7 @@ class GetDocumentsActionTest extends KernelTestCase
         $this->documentIndex->refresh();
 
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->get('/documents?categoryId=' . (string) $category1->getId())
             ->assertSuccessful()
             ->assertJsonMatches('total', 2);

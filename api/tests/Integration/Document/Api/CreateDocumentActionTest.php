@@ -6,6 +6,8 @@ namespace App\Tests\Integration\Document\Api;
 
 use App\Document\Infrastructure\Fixtures\DocumentFactory;
 use App\Document\Infrastructure\Projection\DocumentIndex;
+use App\User\Domain\Enum\UserRole;
+use App\User\Infrastructure\Fixtures\UserFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Zenstruck\Browser\Test\HasBrowser;
@@ -40,12 +42,14 @@ class CreateDocumentActionTest extends KernelTestCase
 
     public function test_is_document_created(): void
     {
+        $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
         $pdfContent = '%PDF-1.4 Test PDF Content';
         $pdfPath = sys_get_temp_dir() . '/test-file.pdf';
         file_put_contents($pdfPath, $pdfContent);
         $file = new UploadedFile($pdfPath, 'test-file.pdf', 'application/pdf', null, true);
 
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->post('/documents', [
                 'json' => [
                     'name' => 'Sample Document',
@@ -63,7 +67,10 @@ class CreateDocumentActionTest extends KernelTestCase
 
     public function test_is_error_when_file_is_missing(): void
     {
+        $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
+
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->post('/documents', [
                 'json' => [
                     'name' => 'Sample Document',
@@ -77,12 +84,14 @@ class CreateDocumentActionTest extends KernelTestCase
 
     public function test_is_error_when_data_is_invalid(): void
     {
+        $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
         $pdfContent = '%PDF-1.4 Test PDF Content';
         $pdfPath = sys_get_temp_dir() . '/test-file.pdf';
         file_put_contents($pdfPath, $pdfContent);
         $file = new UploadedFile($pdfPath, 'test-file.pdf', 'application/pdf', null, true);
 
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->post('/documents', [
                 'json' => [
                     'name' => '',

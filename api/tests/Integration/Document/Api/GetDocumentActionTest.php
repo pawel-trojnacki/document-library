@@ -5,6 +5,7 @@ namespace App\Tests\Integration\Document\Api;
 use App\Document\Infrastructure\Api\GetDocumentAction;
 use App\Document\Infrastructure\Fixtures\DocumentFactory;
 use App\Document\Infrastructure\Projection\DocumentIndex;
+use App\User\Infrastructure\Fixtures\UserFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Uid\Uuid;
@@ -34,9 +35,11 @@ class GetDocumentActionTest extends KernelTestCase
 
     public function test_is_document_provided(): void
     {
+        $authenticatedUser = UserFactory::createOne();
         $document = DocumentFactory::new()->create();
 
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->get('/documents/' . $document->getId())
             ->assertSuccessful()
             ->assertJsonMatches('id', (string) $document->getId());
@@ -44,7 +47,10 @@ class GetDocumentActionTest extends KernelTestCase
 
     public function test_is_error_when_document_not_found(): void
     {
+        $authenticatedUser = UserFactory::createOne();
+
         $this->browser()
+            ->actingAs($authenticatedUser)
             ->get('/documents/' . (string) Uuid::v7())
             ->assertStatus(404);
     }
