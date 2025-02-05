@@ -8,6 +8,8 @@ use App\Document\Application\Command\CreateDocument;
 use App\Document\Application\Dto\DocumentDto;
 use App\Document\Application\Service\FileService;
 use App\Shared\Application\Command\Sync\CommandBus;
+use App\User\Application\Service\UserProvider;
+use App\User\Domain\Entity\User;
 use App\User\Domain\Enum\UserRole;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -25,6 +27,7 @@ final class CreateDocumentAction extends AbstractController
     public function __construct(
         private FileService $fileService,
         private CommandBus $commandBus,
+        private UserProvider $userProvider,
     ) {
     }
 
@@ -56,8 +59,10 @@ final class CreateDocumentAction extends AbstractController
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
+        /** @var User $author */
+        $author = $this->userProvider->getCurrentUser();
         $storedFileDto = $this->fileService->upload($file);
-        $command = CreateDocument::create($dto, $storedFileDto);
+        $command = CreateDocument::create($author, $dto, $storedFileDto);
         $this->commandBus->dispatch($command);
 
         return $this->json(null, Response::HTTP_CREATED);

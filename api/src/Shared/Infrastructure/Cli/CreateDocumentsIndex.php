@@ -11,8 +11,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    name: 'app:setup-elastic-search',
-    description: 'Create Elasticsearch indexes'
+    name: 'app:create-documents-index',
+    description: 'Create Elasticsearch documents index'
 )]
 final class CreateDocumentsIndex extends Command
 {

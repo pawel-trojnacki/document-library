@@ -37,7 +37,7 @@ class EditDocumentActionTest extends KernelTestCase
     public function test_is_document_updated(): void
     {
         $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
-        $document = DocumentFactory::new()->create();
+        $document = DocumentFactory::createOne();
 
         $this->browser()
             ->actingAs($authenticatedUser)
@@ -57,7 +57,7 @@ class EditDocumentActionTest extends KernelTestCase
     public function test_is_error_when_data_is_invalid(): void
     {
         $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
-        $document = DocumentFactory::new()->create();
+        $document = DocumentFactory::createOne();
 
         $this->browser()
             ->actingAs($authenticatedUser)

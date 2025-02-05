@@ -3,6 +3,7 @@
 namespace App\Tests\Integration\Document\Api;
 
 use App\Document\Infrastructure\Api\GetDocumentAction;
+use App\Document\Infrastructure\Fixtures\CategoryFactory;
 use App\Document\Infrastructure\Fixtures\DocumentFactory;
 use App\Document\Infrastructure\Projection\DocumentIndex;
 use App\User\Infrastructure\Fixtures\UserFactory;
@@ -36,13 +37,20 @@ class GetDocumentActionTest extends KernelTestCase
     public function test_is_document_provided(): void
     {
         $authenticatedUser = UserFactory::createOne();
-        $document = DocumentFactory::new()->create();
+        $document = DocumentFactory::createOne();
 
         $this->browser()
             ->actingAs($authenticatedUser)
             ->get('/documents/' . $document->getId())
             ->assertSuccessful()
-            ->assertJsonMatches('id', (string) $document->getId());
+            ->assertJsonMatches('id', (string) $document->getId())
+            ->assertJsonMatches('name', $document->getName())
+            ->assertJsonMatches('description', $document->getDescription())
+            ->assertJsonMatches('categoryId', (string) $document->getCategory()->getId())
+            ->assertJsonMatches('categoryName', $document->getCategory()->getName())
+            ->assertJsonMatches('authorId', (string) $document->getAuthor()->getId())
+            ->assertJsonMatches('authorName', $document->getAuthor()->getFullName())
+        ;
     }
 
     public function test_is_error_when_document_not_found(): void

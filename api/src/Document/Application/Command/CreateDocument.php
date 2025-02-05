@@ -8,6 +8,7 @@ use App\Document\Application\Dto\DocumentDto;
 use App\Document\Application\Dto\StoredFileDto;
 use App\Document\Domain\Enum\FileType;
 use App\Shared\Application\Command\Sync\Command;
+use App\User\Domain\Entity\User;
 use Symfony\Component\Uid\Uuid;
 
 readonly class CreateDocument implements Command
@@ -15,6 +16,7 @@ readonly class CreateDocument implements Command
     public Uuid $id;
 
     public function __construct(
+        public User $user,
         public ?Uuid $categoryId,
         public string $name,
         public ?string $description,
@@ -25,9 +27,10 @@ readonly class CreateDocument implements Command
         $this->id = Uuid::v7();
     }
 
-    public static function create(DocumentDto $documentDto, StoredFileDto $storedFileDto): self
+    public static function create(User $user, DocumentDto $documentDto, StoredFileDto $storedFileDto): self
     {
         return new self(
+            user: $user,
             categoryId: $documentDto->categoryId,
             name: $documentDto->name,
             description: $documentDto->description,

@@ -7,6 +7,8 @@ namespace App\Document\Infrastructure\Fixtures;
 use App\Document\Domain\Entity\Document;
 use App\Document\Domain\Enum\FileType;
 use App\Document\Infrastructure\Projection\DocumentProjection;
+use App\User\Domain\Enum\UserRole;
+use App\User\Infrastructure\Fixtures\UserFactory;
 use Symfony\Component\Uid\Uuid;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
@@ -30,6 +32,7 @@ final class DocumentFactory extends PersistentProxyObjectFactory
     {
         return [
             'id' => Uuid::v7(),
+            'author' => UserFactory::new(['role' => UserRole::ADMIN]),
             'category' => CategoryFactory::new(),
             'name' => self::faker()->word(),
             'fileType' => FileType::PDF,

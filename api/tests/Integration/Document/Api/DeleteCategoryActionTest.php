@@ -36,7 +36,7 @@ class DeleteCategoryActionTest extends KernelTestCase
     public function test_is_category_deleted(): void
     {
         $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
-        $category = CategoryFactory::new()->create();
+        $category = CategoryFactory::createOne();
 
         $this->browser()
             ->actingAs($authenticatedUser)

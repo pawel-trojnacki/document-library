@@ -19,10 +19,17 @@ final class ArrayToDocumentViewTransformer
      *     description: string|null,
      *     categoryName: string|null,
      *     categoryId: string|null,
+     *     authorName: string|null,
+     *     authorId: string|null,
      * } $data
      */
     public function transform(array $data): DocumentView
     {
+        $categoryName = $data['categoryName'] ?? null;
+        $categoryId = $data['categoryId'] ?? null;
+        $authorName = $data['authorName'] ?? null;
+        $authorId = $data['authorId'] ?? null;
+
         return new DocumentView(
             id: $data['id'],
             createdAt: (new \DateTimeImmutable($data['createdAt']))->format('Y-m-d H:i'),
@@ -31,8 +38,10 @@ final class ArrayToDocumentViewTransformer
             originalName: $data['originalName'],
             name: $data['name'],
             description: $data['description'],
-            categoryName: $data['categoryName'],
-            categoryId: $data['categoryId'],
+            categoryName: $categoryName,
+            categoryId: $categoryId,
+            authorName: $authorName,
+            authorId: $authorId,
         );
     }
 }

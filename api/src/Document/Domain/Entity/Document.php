@@ -6,6 +6,7 @@ namespace App\Document\Domain\Entity;
 
 use App\Document\Domain\Enum\FileType;
 use App\Document\Infrastructure\Repository\DocumentRepository;
+use App\User\Domain\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -24,6 +25,10 @@ class Document
 
     #[ORM\Column]
     private \DateTimeImmutable $updatedAt;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    private ?User $author;
 
     #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(onDelete: 'SET NULL')]
@@ -49,6 +54,7 @@ class Document
 
     public function __construct(
         Uuid $id,
+        User $author,
         ?Category $category,
         string $name,
         FileType $fileType,
@@ -60,6 +66,7 @@ class Document
         $this->id = $id;
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+        $this->author = $author;
         $this->category = $category;
         $this->name = $name;
         $this->fileType = $fileType;
@@ -87,6 +94,11 @@ class Document
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
     }
 
     public function getCategory(): ?Category

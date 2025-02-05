@@ -25,6 +25,8 @@ final class DocumentToArrayTransformer
             'originalName' => $document->getOriginalName(),
             'description' => $document->getDescription(),
             'content' => $document->getContent(),
+            'authorId' => $document->getAuthor()->getId(),
+            'authorName' => $document->getAuthor()->getFullName(),
         ];
     }
 }

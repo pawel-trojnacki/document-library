@@ -29,6 +29,7 @@ final class CreateDocumentHandler implements CommandHandler
 
         $document = new Document(
             $command->id,
+            $command->user,
             $category,
             $command->name,
             $command->fileType,

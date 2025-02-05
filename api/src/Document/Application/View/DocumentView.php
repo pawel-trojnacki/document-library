@@ -16,6 +16,8 @@ readonly class DocumentView
         public ?string $description,
         public ?string $categoryName,
         public ?string $categoryId,
+        public ?string $authorName,
+        public ?string $authorId,
     ) {
     }
 }

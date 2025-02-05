@@ -36,7 +36,7 @@ class DeleteDocumentActionTest extends KernelTestCase
     public function test_is_document_deleted(): void
     {
         $authenticatedUser = UserFactory::createOne(['role' => UserRole::ADMIN]);
-        $document = DocumentFactory::new()->create();
+        $document = DocumentFactory::createOne();
 
         $this->browser()
             ->actingAs($authenticatedUser)

@@ -45,6 +45,29 @@ final class ElasticsearchClient implements ElasticsearchClientInterface
         ])->asBool();
     }
 
+    public function mappingFieldExists(string $index, string $field): bool
+    {
+        $response = $this->client->indices()->getFieldMapping([
+            'index' => $this->prepareIndexName($index),
+            'fields' => [$field],
+        ])->asObject();
+
+        $mapping = $response->{$this->prepareIndexName($index)}?->mappings ?? [];
+
+        return !empty((array) $mapping);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateMapping(string $index, array $body): void
+    {
+        $this->client->indices()->putMapping([
+            'index' => $this->prepareIndexName($index),
+            'body' => $body,
+        ]);
+    }
+
     public function refresh(string $index): void
     {
         $this->client->indices()->refresh([

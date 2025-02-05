@@ -64,6 +64,19 @@ final class DocumentIndex
                 ],
             ]);
         }
+
+        if (!$this->client->mappingFieldExists(self::INDEX, 'authorId')) {
+            $this->client->updateMapping(self::INDEX, [
+                'properties' => [
+                    'authorId' => [
+                        'type' => 'keyword',
+                    ],
+                    'authorName' => [
+                        'type' => 'keyword',
+                    ],
+                ],
+            ]);
+        }
     }
 
     public function delete(): void

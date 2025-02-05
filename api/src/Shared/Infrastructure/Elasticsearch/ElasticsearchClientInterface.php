@@ -13,7 +13,14 @@ interface ElasticsearchClientInterface
 
     public function deleteIndex(string $index): void;
 
+    /*
+     * @param mixed[] $body
+     */
+    public function updateMapping(string $index, array $body): void;
+
     public function indexExists(string $index): bool;
+
+    public function mappingFieldExists(string $index, string $field): bool;
 
     public function refresh(string $index): void;
 
