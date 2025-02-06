@@ -1,6 +1,35 @@
+import {BrowserRouter, Link, Outlet, Route, Routes} from "react-router";
+import {HelmetProvider} from "react-helmet-async";
+import Documents from "./views/Documents.tsx";
+import Login from "./views/Login.tsx";
+import Users from "./views/Users.tsx";
+
+
+function AuthenticatedLayout() {
+  return (
+    <div>
+      <nav>
+        <Link to="/">Documents</Link>
+        <Link to="users">Users</Link>
+      </nav>
+      <Outlet />
+    </div>
+  )
+}
+
 function App() {
   return (
-    <h1>Frontend</h1>
+    <HelmetProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<AuthenticatedLayout />}>
+            <Route index path="/" element={<Documents />} />
+            <Route path="/users" element={<Users />} />
+          </Route>
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
+    </HelmetProvider>
   )
 }
 
