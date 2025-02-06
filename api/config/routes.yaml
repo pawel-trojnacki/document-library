@@ -1,5 +1,7 @@
 api_login_check:
     path: /login-check
+api_refresh_token:
+    path: /refresh-token
 api_document:
     resource:
         path: ../src/Document/Infrastructure/Api/

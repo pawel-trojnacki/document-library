@@ -10,23 +10,28 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        login:
-            pattern: ^/login
+        api:
+            pattern: ^
             stateless: true
+            entry_point: jwt
+            jwt: ~
             json_login:
                 check_path: /login-check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-        api:
-            pattern: ^
-            stateless: true
-            jwt: ~
+            refresh_jwt:
+                check_path: /refresh-token
+#        api:
+#            pattern: ^
+#            stateless: true
+#            jwt: ~
 #        main:
 #            lazy: true
 #            provider: app_user_provider
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER
     access_control:
+        - { path: ^/(login-check|refresh-token), roles: PUBLIC_ACCESS }
         - { path: ^, roles: ROLE_USER }
 
 when@test:
