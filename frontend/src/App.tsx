@@ -3,6 +3,7 @@ import {HelmetProvider} from "react-helmet-async";
 import Documents from "./views/Documents.tsx";
 import Login from "./views/Login.tsx";
 import Users from "./views/Users.tsx";
+import CssBaseline from '@mui/material/CssBaseline';
 
 
 function AuthenticatedLayout() {
@@ -20,6 +21,7 @@ function AuthenticatedLayout() {
 function App() {
   return (
     <HelmetProvider>
+      <CssBaseline />
       <BrowserRouter>
         <Routes>
           <Route element={<AuthenticatedLayout />}>
