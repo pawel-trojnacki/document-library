@@ -1,5 +1,5 @@
 class AuthService {
-  static async login(email: string, password: string): Promise<{token: string, refreshToken: string}> {
+  static async login(email: string, password: string): Promise<{token: string, refresh_token: string}> {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/login-check`, {
       method: "POST",
       headers: {

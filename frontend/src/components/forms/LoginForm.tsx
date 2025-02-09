@@ -1,6 +1,8 @@
-import { useState } from 'react';
-import { Alert, Box, Button, TextField } from '@mui/material';
+import {useEffect, useState} from "react";
+import { Alert, Box, Button, TextField } from "@mui/material";
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
+import { useAuthStore } from "../../store/authStore.ts";
+import { useNavigate } from "react-router";
 import AuthService from "../../service/AuthService.tsx";
 
 type FormValues = {
@@ -16,7 +18,15 @@ const defaultValues: FormValues = {
 function LoginForm() {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { login, getUser } = useAuthStore();
+  const navigate = useNavigate();
   const { control, handleSubmit } = useForm<FormValues>({defaultValues});
+
+  useEffect(() => {
+    if (getUser()) {
+      navigate("/", {replace: true});
+    }
+  }, [getUser, navigate]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setError(null);
@@ -24,8 +34,9 @@ function LoginForm() {
 
     try {
       const response = await AuthService.login(data.email, data.password);
-      console.log(response);
+      login(response.token, response.refresh_token);
       setLoading(false);
+      navigate("/", {replace: true});
     } catch (e) {
       setError(e instanceof Error ? e.message : "An error occurred");
       setLoading(false);

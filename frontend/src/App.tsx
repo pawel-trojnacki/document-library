@@ -1,12 +1,18 @@
-import {BrowserRouter, Link, Outlet, Route, Routes} from "react-router";
+import {BrowserRouter, Link, Outlet, Route, Routes, Navigate} from "react-router";
 import {HelmetProvider} from "react-helmet-async";
 import Documents from "./views/Documents.tsx";
 import Login from "./views/Login.tsx";
 import Users from "./views/Users.tsx";
 import CssBaseline from '@mui/material/CssBaseline';
-
+import { useAuthStore } from "./store/authStore.ts";
 
 function AuthenticatedLayout() {
+  const { getUser } = useAuthStore();
+
+  if (!getUser()) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <div>
       <nav>
