@@ -1,5 +1,6 @@
-import {Box, Button, TextField} from '@mui/material';
-import {Controller, useForm, SubmitHandler} from 'react-hook-form';
+import { useState } from 'react';
+import { Alert, Box, Button, TextField } from '@mui/material';
+import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import AuthService from "../../service/AuthService.tsx";
 
 type FormValues = {
@@ -13,14 +14,31 @@ const defaultValues: FormValues = {
 }
 
 function LoginForm() {
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { control, handleSubmit } = useForm<FormValues>({defaultValues});
+
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const response = await AuthService.login(data.email, data.password);
-    console.log(response);
+    setError(null);
+    setLoading(true);
+
+    try {
+      const response = await AuthService.login(data.email, data.password);
+      console.log(response);
+      setLoading(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "An error occurred");
+      setLoading(false);
+    }
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
       <Box sx={{ pb: 2 }}>
         <Controller
           name="email"
@@ -36,6 +54,8 @@ function LoginForm() {
               fullWidth
               label="E-mail"
               variant="outlined"
+              autoComplete="username"
+              disabled={isLoading}
               required
             />
           )}
@@ -56,12 +76,20 @@ function LoginForm() {
               fullWidth
               label="Password"
               variant="outlined"
+              autoComplete="current-password"
+              disabled={isLoading}
               required
             />
           )}
         />
       </Box>
-      <Button variant="contained" type="submit">Log in</Button>
+      <Button
+        variant="contained"
+        type="submit"
+        disabled={isLoading}
+      >
+        Log in
+      </Button>
     </form>
   )
 }
