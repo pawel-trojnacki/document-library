@@ -3,7 +3,7 @@ import { Alert, Box, Button, TextField } from "@mui/material";
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import { useAuthStore } from "../../store/authStore.ts";
 import { useNavigate } from "react-router";
-import AuthService from "../../service/AuthService.tsx";
+import AuthService from "../../service/AuthService.ts";
 
 type FormValues = {
   email: string;
