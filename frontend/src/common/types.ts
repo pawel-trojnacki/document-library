@@ -4,7 +4,7 @@ export type User = {
   email: string;
   name: string;
   role: string;
-  isAdmin: string;
+  isAdmin: boolean;
 }
 
 export type Document = {
