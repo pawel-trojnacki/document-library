@@ -1,5 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import {
+  Alert,
+  Box,
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -14,7 +17,17 @@ import DocumentRow from "./DocumentRow.tsx";
 function DocumentTable() {
   const {
     data,
+    isLoading,
+    error
   } = useQuery({queryKey: ["documents"], queryFn: DocumentService.getDocuments});
+
+  if (isLoading) return (
+    <Box>
+      <CircularProgress />
+    </Box>
+  )
+
+  if (error) return <Alert severity="error">{error.message}</Alert>
 
   return (
     <TableContainer component={Paper}>

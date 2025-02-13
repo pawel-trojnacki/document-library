@@ -6,7 +6,7 @@ function Login() {
   return (
     <>
       <Head title="Login" />
-      <Box sx={{ py: 4, bgcolor: '#e3f2fd', minHeight: '100vh' }}>
+      <Box sx={{ py: 4, bgcolor: "#ede7f6", minHeight: "100vh" }}>
         <Container maxWidth="sm">
           <Typography
             variant="h4"

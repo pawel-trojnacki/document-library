@@ -7,6 +7,15 @@ import Login from "./views/Login.tsx";
 import Users from "./views/Users.tsx";
 import CssBaseline from '@mui/material/CssBaseline';
 import { useAuthStore } from "./store/authStore.ts";
+import {createTheme, ThemeProvider} from "@mui/material";
+import {blue, deepPurple} from "@mui/material/colors";
+
+const theme = createTheme({
+  palette: {
+    primary: deepPurple,
+    secondary: blue,
+  },
+})
 
 function AuthenticatedLayout() {
   const { getUser } = useAuthStore();
@@ -29,16 +38,18 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
-        <CssBaseline />
-        <BrowserRouter>
-          <Routes>
-            <Route element={<AuthenticatedLayout />}>
-              <Route index path="/" element={<Documents />} />
-              <Route path="/users" element={<Users />} />
-            </Route>
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <BrowserRouter>
+            <Routes>
+              <Route element={<AuthenticatedLayout />}>
+                <Route index path="/" element={<Documents />} />
+                <Route path="/users" element={<Users />} />
+              </Route>
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </BrowserRouter>
+        </ThemeProvider>
       </HelmetProvider>
     </QueryClientProvider>
   )
