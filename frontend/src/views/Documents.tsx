@@ -1,22 +1,21 @@
-import { useQuery } from "@tanstack/react-query";
 import Head from "../components/common/Head.tsx";
-import DocumentService from "../service/DocumentService.ts";
+import { Container, Typography } from "@mui/material";
+import DocumentTable from "../components/tables/DocumentTable/DocumentTable.tsx";
 
 function Documents() {
-  const {
-    data,
-  } = useQuery({queryKey: ["documents"], queryFn: DocumentService.getDocuments});
     return (
       <>
         <Head />
-        <div>
-          <h1>Documents</h1>
-          {data?.items.map((document) => (
-            <div key={document.id}>
-              <h2>{document.name}</h2>
-            </div>
-          ))}
-        </div>
+        <Container maxWidth="lg" sx={{py: 4}}>
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{mb: 4}}
+          >
+            Documents
+          </Typography>
+          <DocumentTable />
+        </Container>
       </>
     );
 }

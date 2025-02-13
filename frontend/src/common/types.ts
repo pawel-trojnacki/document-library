@@ -7,10 +7,23 @@ export type User = {
   isAdmin: boolean;
 }
 
+export type FileType = "doc" | "docx" | "xls" | "xlsx" | "pdf";
+
+export type FileTypeDetails = {
+  label: string;
+  color: string;
+}
+
 export type Document = {
   id: string;
-  name: string;
-  content: string;
   createdAt: string;
   updatedAt: string;
+  fileType: FileType;
+  originalName: string;
+  name: string;
+  description: string | null;
+  categoryId: string | null;
+  categoryName: string | null;
+  authorId: string;
+  authorName: string;
 }

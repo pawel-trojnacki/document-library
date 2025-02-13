@@ -6,7 +6,8 @@ abstract class AuthenticatedRequestService {
     url: string,
     body?: any,
     contentType: string = "application/json",
-    allowRefreshToken: boolean = true
+    allowRefreshToken: boolean = true,
+    returnRaw: boolean = false,
   ): Promise<T> {
     const token = useAuthStore.getState().getToken();
 
@@ -30,7 +31,7 @@ abstract class AuthenticatedRequestService {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/${url}`, params);
 
     if (response.ok) {
-      return await response.json();
+      return returnRaw ? response : await response.json();
     }
 
     if (response.status === 401 && allowRefreshToken) {
@@ -50,10 +51,12 @@ abstract class AuthenticatedRequestService {
       const refreshData = await refreshResponse.json();
       useAuthStore.getState().login(refreshData.token, refreshData.refresh_token);
 
-      return AuthenticatedRequestService.makeRequest(method, url, body, contentType, false);
+      return AuthenticatedRequestService.makeRequest(method, url, body, contentType, false, returnRaw);
     }
 
-    throw new Error((await response.json()).message ?? "Unknown error occurred");
+    const errorResponse = await response.json();
+
+    throw new Error(errorResponse?.message ?? response.statusText ?? "Unknown error occurred");
   }
 }
 
