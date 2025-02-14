@@ -9,7 +9,7 @@ abstract class AuthenticatedRequestService {
     allowRefreshToken: boolean = true,
     returnRaw: boolean = false,
   ): Promise<T> {
-    const token = useAuthStore.getState().getToken();
+    const token = useAuthStore.getState().token;
 
     if (!token) {
       throw new Error("No token found");
@@ -35,7 +35,7 @@ abstract class AuthenticatedRequestService {
     }
 
     if (response.status === 401 && allowRefreshToken) {
-      const refreshToken = useAuthStore.getState().getRefreshToken();
+      const refreshToken = useAuthStore.getState().refreshToken;
       const refreshResponse = await fetch(`${import.meta.env.VITE_API_URL}/refresh-token`, {
         method: "POST",
         headers: {

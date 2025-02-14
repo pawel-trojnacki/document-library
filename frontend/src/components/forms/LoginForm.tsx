@@ -18,15 +18,15 @@ const defaultValues: FormValues = {
 function LoginForm() {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { login, getUser } = useAuthStore();
+  const { login, user } = useAuthStore();
   const navigate = useNavigate();
   const { control, handleSubmit } = useForm<FormValues>({defaultValues});
 
   useEffect(() => {
-    if (getUser()) {
+    if (user) {
       navigate("/", {replace: true});
     }
-  }, [getUser, navigate]);
+  }, [user, navigate]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setError(null);

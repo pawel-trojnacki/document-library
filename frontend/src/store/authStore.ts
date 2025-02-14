@@ -1,47 +1,30 @@
-import { create } from "zustand";
-import { User } from "../common/types.ts";
-import { getUserFromToken } from "../common/functions.ts";
+import {create} from "zustand";
+import {persist} from "zustand/middleware";
+import {User} from "../common/types.ts";
+import {getUserFromToken} from "../common/functions.ts";
 
 type AuthStore = {
   user: User | null;
+  token: string | null;
+  refreshToken: string | null;
   login: (token: string, refreshToken: string) => void;
   logout: () => void;
-  getUser: () => User | null;
-  getToken: () => string | null;
-  getRefreshToken: () => string | null;
 }
 
-export const useAuthStore = create<AuthStore>((set, get) => ({
-  user: null,
-  login: (token, refreshToken) => {
-    const user = getUserFromToken(token);
-    set({ user });
-    localStorage.setItem("token", token);
-    localStorage.setItem("refreshToken", refreshToken);
-  },
-  logout: () => {
-    set({ user: null });
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
-  },
-  getUser: () => {
-    const user = get().user;
-    if (user) {
-      return user;
+export const useAuthStore = create<AuthStore>()(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      refreshToken: null,
+      login: (token: string, refreshToken: string) => {
+        const user = getUserFromToken(token);
+        set({token, refreshToken, user});
+      },
+      logout: () => set({user: null, token: null, refreshToken: null}),
+    }),
+    {
+      name: "auth-store",
     }
-
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return null;
-    }
-
-    set({ user: getUserFromToken(token) });
-    return get().user;
-  },
-  getToken: () => {
-    return localStorage.getItem("token");
-  },
-  getRefreshToken: () => {
-    return localStorage.getItem("refreshToken");
-  },
-}));
+  )
+);

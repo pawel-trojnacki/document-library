@@ -27,7 +27,7 @@ const pages = [
 ];
 
 function Navbar() {
-  const {getUser, logout} = useAuthStore();
+  const {user, logout} = useAuthStore();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -73,7 +73,7 @@ function Navbar() {
           >
             Document Library
           </Typography>
-          {getUser()?.isAdmin && (
+          {user?.isAdmin && (
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
@@ -126,7 +126,7 @@ function Navbar() {
             Document Library
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {getUser()?.isAdmin && pages.map(({name, url}) => (
+            {user?.isAdmin && pages.map(({name, url}) => (
               <Button
                 key={url}
                 onClick={handleCloseNavMenu}

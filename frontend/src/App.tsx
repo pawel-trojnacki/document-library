@@ -18,9 +18,9 @@ const theme = createTheme({
 })
 
 function AuthenticatedLayout() {
-  const { getUser } = useAuthStore();
+  const { user } = useAuthStore();
 
-  if (!getUser()) {
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 
