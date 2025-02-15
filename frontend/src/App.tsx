@@ -1,15 +1,16 @@
 import { BrowserRouter, Outlet, Route, Routes, Navigate } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
+import { Toaster } from "react-hot-toast";
+import CssBaseline from '@mui/material/CssBaseline';
+import {createTheme, ThemeProvider} from "@mui/material";
+import {blue, deepPurple} from "@mui/material/colors";
+import { useAuthStore } from "./store/authStore.ts";
 import Navbar from "./components/layout/Navbar.tsx";
 import Documents from "./views/Documents.tsx";
 import Login from "./views/Login.tsx";
 import Categories from "./views/Categories.tsx";
 import Users from "./views/Users.tsx";
-import CssBaseline from '@mui/material/CssBaseline';
-import { useAuthStore } from "./store/authStore.ts";
-import {createTheme, ThemeProvider} from "@mui/material";
-import {blue, deepPurple} from "@mui/material/colors";
 
 const theme = createTheme({
   palette: {
@@ -51,6 +52,7 @@ function App() {
               <Route path="/login" element={<Login />} />
             </Routes>
           </BrowserRouter>
+          <Toaster position="top-right" />
         </ThemeProvider>
       </HelmetProvider>
     </QueryClientProvider>

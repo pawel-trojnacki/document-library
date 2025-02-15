@@ -14,7 +14,7 @@ function Categories() {
 
   return (
     <>
-      <Head title="Cagories" />
+      <Head title="Categories" />
       <Container maxWidth="lg" sx={{py: 4}}>
         <Typography
           component="h1"
