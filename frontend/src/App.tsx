@@ -4,6 +4,7 @@ import { HelmetProvider } from "react-helmet-async";
 import Navbar from "./components/layout/Navbar.tsx";
 import Documents from "./views/Documents.tsx";
 import Login from "./views/Login.tsx";
+import Categories from "./views/Categories.tsx";
 import Users from "./views/Users.tsx";
 import CssBaseline from '@mui/material/CssBaseline';
 import { useAuthStore } from "./store/authStore.ts";
@@ -44,6 +45,7 @@ function App() {
             <Routes>
               <Route element={<AuthenticatedLayout />}>
                 <Route index path="/" element={<Documents />} />
+                <Route path="/categories" element={<Categories />} />
                 <Route path="/users" element={<Users />} />
               </Route>
               <Route path="/login" element={<Login />} />

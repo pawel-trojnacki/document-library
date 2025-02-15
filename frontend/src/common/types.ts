@@ -27,3 +27,8 @@ export type Document = {
   authorId: string;
   authorName: string;
 }
+
+export type Category = {
+  id: string;
+  name: string; 
+}
