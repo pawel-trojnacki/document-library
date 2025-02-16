@@ -1,3 +1,4 @@
+import {useState} from "react";
 import {useInfiniteQuery} from "@tanstack/react-query";
 import {useSearchParams} from "react-router";
 import {
@@ -13,11 +14,17 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import {useAuthStore} from "../../../store/authStore.ts";
 import DocumentService from "../../../service/DocumentService.ts";
 import DocumentRow from "./DocumentRow.tsx";
 import DocumentFilters from "./DocumentFilters.tsx";
+import FloatingActionButton from "../../ui/FloatingActionButton.tsx";
+import DocumentForm from "../../forms/DocumentForm.tsx";
 
 function DocumentTable() {
+  const {user} = useAuthStore();
+  const [isModalOpen, setModalOpen] = useState(false);
+
   const [searchParams] = useSearchParams();
 
   const fetchDocuments = async ({pageParam = 0}) => {
@@ -96,6 +103,12 @@ function DocumentTable() {
         >
           Load more
         </Button>
+      )}
+      {user?.isAdmin && (
+        <>
+          <FloatingActionButton ariaLabel="Create document" onClick={() => setModalOpen(true)} />
+          <DocumentForm isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+        </>
       )}
     </>
   )

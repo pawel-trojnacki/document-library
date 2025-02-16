@@ -1,15 +1,12 @@
 import {useState} from "react";
 import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import CategoryService from "../../../service/CategoryService.ts";
-import CategoryForm from "../../forms/CategoryForm.tsx";
 import {
   Alert,
   Backdrop,
   Box,
   Button,
   CircularProgress,
-  Fab,
   Paper,
   Table,
   TableBody,
@@ -18,7 +15,9 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import {Add as AddIcon} from "@mui/icons-material";
+import CategoryService from "../../../service/CategoryService.ts";
+import CategoryForm from "../../forms/CategoryForm.tsx";
+import FloatingActionButton from "../../ui/FloatingActionButton.tsx";
 
 function CategoryTable() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -91,18 +90,7 @@ function CategoryTable() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Fab
-        onClick={() => setModalOpen(true)}
-        color="primary"
-        aria-label="Create category"
-        sx={{
-          position: "fixed",
-          bottom: "30px",
-          right: "30px",
-        }}
-      >
-        <AddIcon />
-      </Fab>
+      <FloatingActionButton ariaLabel="Create category" onClick={() => setModalOpen(true)} />
       <CategoryForm
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}

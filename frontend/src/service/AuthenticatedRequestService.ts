@@ -5,7 +5,7 @@ abstract class AuthenticatedRequestService {
     method: string,
     url: string,
     body?: any,
-    contentType: string = "application/json",
+    contentType: string | null = "application/json",
     allowRefreshToken: boolean = true,
     returnRaw: boolean = false,
   ): Promise<T> {
@@ -18,8 +18,8 @@ abstract class AuthenticatedRequestService {
     const params = {
       method,
       headers: {
-        "Content-Type": contentType,
         Authorization: `Bearer ${token}`,
+        ...(contentType !== null && {"Content-Type": contentType}),
       },
       body: undefined,
     }

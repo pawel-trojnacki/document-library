@@ -36,3 +36,10 @@ export type Category = {
 export type CategoryPayload = {
   name: string;
 }
+
+export type DocumentPayload = {
+  name: string;
+  description: string;
+  categoryId: string | null;
+  file: File | null;
+}

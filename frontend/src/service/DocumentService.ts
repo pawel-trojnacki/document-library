@@ -29,6 +29,10 @@ class DocumentService extends AuthenticatedRequestService {
       true,
     );
   }
+
+  public static async createDocument(data: FormData): Promise<{}> {
+    return await DocumentService.makeRequest<{}>("POST", "documents", data, null);
+  }
 }
 
 export default DocumentService;

@@ -18,7 +18,7 @@ enum FileType: string
         'application/msword' => self::DOC,
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => self::DOCX,
         'application/vnd.ms-excel' => self::XLS,
-        'application/vnd.openxmlformats-officedocument.spreadsheet.sheet' => self::XLSX,
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => self::XLSX,
     ];
 
     public static function fromMimeType(string $mimeType): self
