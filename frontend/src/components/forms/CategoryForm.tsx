@@ -68,7 +68,7 @@ function CategoryForm({isOpen, onClose}: Props) {
           <Button
             variant="contained"
             type="submit"
-            disabled={isPending}
+            loading={isPending}
           >
             Save
           </Button>

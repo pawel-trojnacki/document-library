@@ -97,7 +97,7 @@ function LoginForm() {
       <Button
         variant="contained"
         type="submit"
-        disabled={isLoading}
+        loading={isLoading}
       >
         Log in
       </Button>

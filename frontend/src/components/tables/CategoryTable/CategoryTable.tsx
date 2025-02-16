@@ -5,6 +5,7 @@ import CategoryService from "../../../service/CategoryService.ts";
 import CategoryForm from "../../forms/CategoryForm.tsx";
 import {
   Alert,
+  Backdrop,
   Box,
   Button,
   CircularProgress,
@@ -15,7 +16,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
 } from "@mui/material";
 import {Add as AddIcon} from "@mui/icons-material";
 
@@ -106,6 +107,11 @@ function CategoryTable() {
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
       />
+      <Backdrop
+        open={deleteCategoryMutation.isPending}
+      >
+        <CircularProgress sx={{color: "#FFF"}} />
+      </Backdrop>
     </>
   )
 }
