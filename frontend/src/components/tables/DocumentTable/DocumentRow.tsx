@@ -1,6 +1,7 @@
 import {useState} from "react";
-import {Box, Button, Chip, Collapse, IconButton, TableCell, TableRow, Typography} from "@mui/material";
+import {Box, Chip, Collapse, IconButton, TableCell, TableRow, Tooltip, Typography} from "@mui/material";
 import {
+  Delete as DeleteIcon,
   Download as DownloadIcon,
   KeyboardArrowDown as KeyboardArrowDownIcon,
   KeyboardArrowUp as KeyboardArrowUpIcon,
@@ -9,14 +10,16 @@ import toast from "react-hot-toast";
 import {Document} from "../../../common/types.ts";
 import {getFileTypeDetails, downloadFile} from "../../../common/functions.ts";
 import DocumentService from "../../../service/DocumentService.ts";
+import {useAuthStore} from "../../../store/authStore.ts";
 
 type Props = {
-  doc: Document
+  doc: Document,
+  handleDelete: () => void;
 };
 
-function DocumentRow({ doc }: Props) {
+function DocumentRow({ doc, handleDelete }: Props) {
   const typeDetails = getFileTypeDetails(doc.fileType);
-
+  const {user} = useAuthStore();
   const [isDetailsOpen, setDetailsOpen] = useState(false);
 
   const handleDownload = async () => {
@@ -44,8 +47,8 @@ function DocumentRow({ doc }: Props) {
       >
         <TableCell>
           <IconButton
-            aria-label="Expand setails"
             size="small"
+            aria-label="Expand document details"
             onClick={handleToggleDetails}
           >
             {isDetailsOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -70,15 +73,29 @@ function DocumentRow({ doc }: Props) {
         <TableCell>{doc.categoryName ?? ''}</TableCell>
         <TableCell>{doc.authorName ?? ''}</TableCell>
         <TableCell>{doc.updatedAt}</TableCell>
-        <TableCell>
-          <Button
-            size="small"
-            variant="contained"
-            startIcon={<DownloadIcon />}
-            onClick={handleDownload}
-          >
-            Download
-          </Button>
+        <TableCell sx={{display: "flex", gap: 1}}>
+          <Tooltip title="Download file">
+            <IconButton
+              size="small"
+              color="primary"
+              onClick={handleDownload}
+            >
+              <DownloadIcon />
+            </IconButton>
+          </Tooltip>
+          {user?.isAdmin && (
+            <>
+              <Tooltip title="Delete file">
+                <IconButton
+                  size="small"
+                  color="error"
+                  onClick={handleDelete}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            </>
+          )}
         </TableCell>
       </TableRow>
       <TableRow

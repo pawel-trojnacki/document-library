@@ -1,6 +1,5 @@
 import AuthenticatedRequestService from "./AuthenticatedRequestService.ts";
 import {Category, CategoryPayload} from "../common/types.ts";
-import DocumentService from "./DocumentService.ts";
 
 class CategoryService extends AuthenticatedRequestService {
   public static async getCategories(): Promise<{total: number, items: Category[]}> {
@@ -8,7 +7,7 @@ class CategoryService extends AuthenticatedRequestService {
   }
 
   public static async createCategory(payload: CategoryPayload): Promise<{}> {
-    return await DocumentService.makeRequest<{}>(
+    return await CategoryService.makeRequest<{}>(
       "POST",
       "categories",
       payload,
@@ -16,7 +15,7 @@ class CategoryService extends AuthenticatedRequestService {
   }
 
   public static async deleteCategory(id: string): Promise<{}> {
-    return await DocumentService.makeRequest<{}>("DELETE", `categories/${id}`);
+    return await CategoryService.makeRequest<{}>("DELETE", `categories/${id}`);
   }
 }
 

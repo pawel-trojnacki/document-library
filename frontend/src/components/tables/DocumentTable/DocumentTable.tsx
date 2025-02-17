@@ -1,8 +1,9 @@
 import {useState} from "react";
-import {useInfiniteQuery} from "@tanstack/react-query";
+import {useInfiniteQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import {useSearchParams} from "react-router";
 import {
   Alert,
+  Backdrop,
   Box,
   Button,
   CircularProgress,
@@ -15,6 +16,7 @@ import {
   TableRow,
 } from "@mui/material";
 import {useAuthStore} from "../../../store/authStore.ts";
+import toast from "react-hot-toast";
 import DocumentService from "../../../service/DocumentService.ts";
 import DocumentRow from "./DocumentRow.tsx";
 import DocumentFilters from "./DocumentFilters.tsx";
@@ -23,6 +25,7 @@ import DocumentForm from "../../forms/DocumentForm.tsx";
 
 function DocumentTable() {
   const {user} = useAuthStore();
+  const queryClient = useQueryClient();
   const [isModalOpen, setModalOpen] = useState(false);
 
   const [searchParams] = useSearchParams();
@@ -56,6 +59,24 @@ function DocumentTable() {
     }
   });
 
+  const deleteDocumentMutation = useMutation({
+    mutationFn: DocumentService.deleteDocument,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ["documents"]});
+      toast.success("Document deleted");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    }
+  });
+
+  const deleteDocument = (id: string) => {
+    const confirmation = window.confirm("Are you sure you want to delete this document?");
+    if(confirmation) {
+      deleteDocumentMutation.mutate(id);
+    }
+  }
+
   if (isLoading) return (
     <Box>
       <CircularProgress />
@@ -82,7 +103,9 @@ function DocumentTable() {
           <TableBody>
             {data?.pages.length > 0 && data.pages.some((page) => page.items.length > 0) ? (
               data.pages.flatMap((page) =>
-                page.items.map((doc) => <DocumentRow doc={doc} key={doc.id} />)
+                page.items.map((doc) => (
+                  <DocumentRow key={doc.id} doc={doc} handleDelete={() => deleteDocument(doc.id)} />
+                ))
               )
             ) : (
               <TableRow>
@@ -110,6 +133,11 @@ function DocumentTable() {
           <DocumentForm isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
         </>
       )}
+      <Backdrop
+        open={deleteDocumentMutation.isPending}
+      >
+        <CircularProgress sx={{color: "#FFF"}} />
+      </Backdrop>
     </>
   )
 }

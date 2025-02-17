@@ -33,6 +33,10 @@ class DocumentService extends AuthenticatedRequestService {
   public static async createDocument(data: FormData): Promise<{}> {
     return await DocumentService.makeRequest<{}>("POST", "documents", data, null);
   }
+
+  public static async deleteDocument(id: string): Promise<{}> {
+    return await DocumentService.makeRequest<{}>("DELETE", `documents/${id}`);
+  }
 }
 
 export default DocumentService;
