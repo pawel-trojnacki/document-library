@@ -15,18 +15,19 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import {useAuthStore} from "../../../store/authStore.ts";
 import toast from "react-hot-toast";
 import DocumentService from "../../../service/DocumentService.ts";
 import DocumentRow from "./DocumentRow.tsx";
 import DocumentFilters from "./DocumentFilters.tsx";
 import FloatingActionButton from "../../ui/FloatingActionButton.tsx";
 import DocumentForm from "../../forms/DocumentForm.tsx";
+import {useAuthStore} from "../../../store/authStore.ts";
+import {useDocumentStore} from "../../../store/documentStore.ts";
 
 function DocumentTable() {
   const {user} = useAuthStore();
+  const {openModal} = useDocumentStore();
   const queryClient = useQueryClient();
-  const [isModalOpen, setModalOpen] = useState(false);
 
   const [searchParams] = useSearchParams();
 
@@ -129,8 +130,8 @@ function DocumentTable() {
       )}
       {user?.isAdmin && (
         <>
-          <FloatingActionButton ariaLabel="Create document" onClick={() => setModalOpen(true)} />
-          <DocumentForm isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+          <FloatingActionButton ariaLabel="Create document" onClick={() => openModal(null)} />
+          <DocumentForm />
         </>
       )}
       <Backdrop

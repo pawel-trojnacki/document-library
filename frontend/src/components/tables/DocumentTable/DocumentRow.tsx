@@ -3,6 +3,7 @@ import {Box, Chip, Collapse, IconButton, TableCell, TableRow, Tooltip, Typograph
 import {
   Delete as DeleteIcon,
   Download as DownloadIcon,
+  Edit as EditIcon,
   KeyboardArrowDown as KeyboardArrowDownIcon,
   KeyboardArrowUp as KeyboardArrowUpIcon,
 } from '@mui/icons-material';
@@ -11,6 +12,7 @@ import {Document} from "../../../common/types.ts";
 import {getFileTypeDetails, downloadFile} from "../../../common/functions.ts";
 import DocumentService from "../../../service/DocumentService.ts";
 import {useAuthStore} from "../../../store/authStore.ts";
+import {useDocumentStore} from "../../../store/documentStore.ts";
 
 type Props = {
   doc: Document,
@@ -20,6 +22,7 @@ type Props = {
 function DocumentRow({ doc, handleDelete }: Props) {
   const typeDetails = getFileTypeDetails(doc.fileType);
   const {user} = useAuthStore();
+  const {openModal} = useDocumentStore();
   const [isDetailsOpen, setDetailsOpen] = useState(false);
 
   const handleDownload = async () => {
@@ -85,7 +88,16 @@ function DocumentRow({ doc, handleDelete }: Props) {
           </Tooltip>
           {user?.isAdmin && (
             <>
-              <Tooltip title="Delete file">
+              <Tooltip title="Edit document">
+                <IconButton
+                  size="small"
+                  color="secondary"
+                  onClick={() => openModal(doc)}
+                >
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Delete document">
                 <IconButton
                   size="small"
                   color="error"

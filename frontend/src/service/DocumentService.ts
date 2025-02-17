@@ -1,5 +1,5 @@
 import AuthenticatedRequestService from "./AuthenticatedRequestService";
-import { Document } from "../common/types";
+import {Document, DocumentPayload} from "../common/types";
 
 class DocumentService extends AuthenticatedRequestService {
   public static async getDocuments(
@@ -32,6 +32,10 @@ class DocumentService extends AuthenticatedRequestService {
 
   public static async createDocument(data: FormData): Promise<{}> {
     return await DocumentService.makeRequest<{}>("POST", "documents", data, null);
+  }
+
+  public static async editDocument({id, data}: {id: string; data: DocumentPayload}): Promise<{}> {
+    return await DocumentService.makeRequest<{}>("PATCH", `documents/${id}`, data);
   }
 
   public static async deleteDocument(id: string): Promise<{}> {
