@@ -11,13 +11,9 @@ type Actions = {
   closeModal: () => void;
 }
 
-export const useDocumentStore = create<State & Actions>()((set) => ({
+export const useDocumentStore = create<State & Actions>((set) => ({
   document: null,
   isModalOpen: false,
-  openModal: (document) => {
-    set({document, isModalOpen: true});
-  },
-  closeModal: () => {
-    set({document: null, isModalOpen: false});
-  }
+  openModal: (document) => set({document, isModalOpen: true}),
+  closeModal: () => set({document: null, isModalOpen: false}),
 }))

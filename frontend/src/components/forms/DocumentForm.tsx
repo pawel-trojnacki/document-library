@@ -27,33 +27,28 @@ function DocumentForm() {
     if (document) {
       reset({
         name: document.name,
-        description: document.description,
+        description: document.description ?? "",
         categoryId: document.categoryId,
         file: null,
       });
+    } else {
+      reset(defaultValues);
     }
   }, [document, reset]);
 
-  const createDocumentMutation = useMutation({
-    mutationFn: DocumentService.createDocument,
-    onSuccess: () => {
-      reset();
-      queryClient.invalidateQueries({ queryKey: ['documents'] })
-      toast.success("Document created");
-      closeModal();
+  const {mutate, isPending} = useMutation({
+    mutationFn: async ({ id, data }: { id: string | null; data: FormData | DocumentPayload }) => {
+      if (id) {
+        return DocumentService.editDocument(id, data as DocumentPayload);
+      } else {
+        return DocumentService.createDocument(data as FormData);
+      }
     },
-    onError: (error) => {
-      toast.error(error.message);
-    }
-  });
-
-  const editDocumentMutation = useMutation({
-    mutationFn: DocumentService.editDocument,
     onSuccess: () => {
       reset();
-      queryClient.invalidateQueries({ queryKey: ['documents'] })
-      toast.success("Document updated");
       closeModal();
+      queryClient.invalidateQueries({ queryKey: ['documents'] });
+      toast.success(document ? "Document updated" : "Document created");
     },
     onError: (error) => {
       toast.error(error.message);
@@ -62,7 +57,7 @@ function DocumentForm() {
 
   const onSubmit: SubmitHandler<DocumentPayload> = (data) => {
     if (document) {
-      editDocumentMutation.mutate({id: document.id, data});
+      mutate({id: document.id, data});
     } else {
       const formData = new FormData();
       formData.append("name", data.name);
@@ -74,7 +69,7 @@ function DocumentForm() {
         formData.append("file", data.file);
       }
 
-      createDocumentMutation.mutate(formData);
+      mutate({id: null, data: formData});
     }
   }
 
@@ -109,7 +104,7 @@ function DocumentForm() {
                   fullWidth
                   label="Document name"
                   variant="outlined"
-                  disabled={createDocumentMutation.isPending || editDocumentMutation.isPending}
+                  disabled={isPending}
                 />
               )}
             />
@@ -131,7 +126,7 @@ function DocumentForm() {
                   variant="outlined"
                   multiline
                   rows={3}
-                  disabled={createDocumentMutation.isPending || editDocumentMutation.isPending}
+                  disabled={isPending}
                 />
               )}
             />
@@ -145,7 +140,7 @@ function DocumentForm() {
                   value={field.value}
                   onChange={field.onChange}
                   label="Category (optional)"
-                  disabled={createDocumentMutation.isPending || editDocumentMutation.isPending}
+                  disabled={isPending}
                 />
               )}
             />
@@ -168,7 +163,7 @@ function DocumentForm() {
                     fullWidth
                     label="Upload file"
                     variant="outlined"
-                    disabled={createDocumentMutation.isPending || editDocumentMutation.isPending}
+                    disabled={isPending}
                     InputProps={{
                       inputProps: {
                         accept: '.xls,.xlsx,.doc,.docx,.pdf'
@@ -183,7 +178,7 @@ function DocumentForm() {
           <Button
             variant="contained"
             type="submit"
-            loading={createDocumentMutation.isPending || editDocumentMutation.isPending}
+            loading={isPending}
           >
             Save
           </Button>

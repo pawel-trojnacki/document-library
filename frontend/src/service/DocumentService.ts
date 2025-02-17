@@ -34,7 +34,7 @@ class DocumentService extends AuthenticatedRequestService {
     return await DocumentService.makeRequest<{}>("POST", "documents", data, null);
   }
 
-  public static async editDocument({id, data}: {id: string; data: DocumentPayload}): Promise<{}> {
+  public static async editDocument(id: string, data: DocumentPayload): Promise<{}> {
     return await DocumentService.makeRequest<{}>("PATCH", `documents/${id}`, data);
   }
 
