@@ -7,36 +7,22 @@ import {
   KeyboardArrowDown as KeyboardArrowDownIcon,
   KeyboardArrowUp as KeyboardArrowUpIcon,
 } from '@mui/icons-material';
-import toast from "react-hot-toast";
 import {Document} from "../../../common/types.ts";
-import {getFileTypeDetails, downloadFile} from "../../../common/functions.ts";
-import DocumentService from "../../../service/DocumentService.ts";
+import {getFileTypeDetails} from "../../../common/functions.ts";
 import {useAuthStore} from "../../../store/authStore.ts";
 import {useDocumentStore} from "../../../store/documentStore.ts";
 
 type Props = {
   doc: Document,
-  handleDelete: () => void;
+  onDelete: () => void;
+  onDownload: () => void;
 };
 
-function DocumentRow({ doc, handleDelete }: Props) {
+function DocumentRow({ doc, onDelete, onDownload }: Props) {
   const typeDetails = getFileTypeDetails(doc.fileType);
   const {user} = useAuthStore();
   const {openModal} = useDocumentStore();
   const [isDetailsOpen, setDetailsOpen] = useState(false);
-
-  const handleDownload = async () => {
-    try {
-      const response = await DocumentService.downloadFile(doc.id);
-      await downloadFile(response, doc.originalName);
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("Couldn't download file");
-      }
-    }
-  }
 
   const handleToggleDetails = () => {
     setDetailsOpen(!isDetailsOpen);
@@ -81,7 +67,7 @@ function DocumentRow({ doc, handleDelete }: Props) {
             <IconButton
               size="small"
               color="primary"
-              onClick={handleDownload}
+              onClick={onDownload}
             >
               <DownloadIcon />
             </IconButton>
@@ -101,7 +87,7 @@ function DocumentRow({ doc, handleDelete }: Props) {
                 <IconButton
                   size="small"
                   color="error"
-                  onClick={handleDelete}
+                  onClick={onDelete}
                 >
                   <DeleteIcon />
                 </IconButton>

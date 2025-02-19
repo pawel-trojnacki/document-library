@@ -1,4 +1,3 @@
-import {useState} from "react";
 import {useInfiniteQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import {useSearchParams} from "react-router";
 import {
@@ -23,6 +22,7 @@ import FloatingActionButton from "../../ui/FloatingActionButton.tsx";
 import DocumentForm from "../../forms/DocumentForm.tsx";
 import {useAuthStore} from "../../../store/authStore.ts";
 import {useDocumentStore} from "../../../store/documentStore.ts";
+import {downloadFile} from "../../../common/functions.ts";
 
 function DocumentTable() {
   const {user} = useAuthStore();
@@ -71,10 +71,23 @@ function DocumentTable() {
     }
   });
 
-  const deleteDocument = (id: string) => {
+  const handleDelete = (id: string) => {
     const confirmation = window.confirm("Are you sure you want to delete this document?");
     if(confirmation) {
       deleteDocumentMutation.mutate(id);
+    }
+  }
+
+  const handleDownload = async (id: string, filename: string) => {
+    try {
+      const response = await DocumentService.downloadFile(id);
+      await downloadFile(response, filename);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Couldn't download file");
+      }
     }
   }
 
@@ -105,7 +118,12 @@ function DocumentTable() {
             {data?.pages.length > 0 && data.pages.some((page) => page.items.length > 0) ? (
               data.pages.flatMap((page) =>
                 page.items.map((doc) => (
-                  <DocumentRow key={doc.id} doc={doc} handleDelete={() => deleteDocument(doc.id)} />
+                  <DocumentRow
+                    key={doc.id}
+                    doc={doc}
+                    onDelete={() => handleDelete(doc.id)}
+                    onDownload={() => handleDownload(doc.id, doc.originalName)}
+                  />
                 ))
               )
             ) : (

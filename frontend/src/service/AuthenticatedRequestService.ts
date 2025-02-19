@@ -45,7 +45,8 @@ abstract class AuthenticatedRequestService {
       });
 
       if (!refreshResponse.ok) {
-        throw new Error("Refresh token failed");
+        useAuthStore.getState().logout();
+        window.location.reload();
       }
 
       const refreshData = await refreshResponse.json();
