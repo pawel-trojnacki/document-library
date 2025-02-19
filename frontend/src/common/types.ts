@@ -1,3 +1,5 @@
+export type UserRole = "ROLE_ADMIN" | "ROLE_USER";
+
 export type User = {
   id: string;
   username: string;
@@ -5,6 +7,26 @@ export type User = {
   name: string;
   role: string;
   isAdmin: boolean;
+}
+
+export type UserPayload = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: UserRole;
+  password: string;
+}
+
+export type ChangePasswordPayload = {
+  password: string;
+}
+
+export type UserDto = {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  createdAt: string;
 }
 
 export type FileType = "doc" | "docx" | "xls" | "xlsx" | "pdf";

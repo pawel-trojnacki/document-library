@@ -18,7 +18,7 @@ type Props = {
   onDownload: () => void;
 };
 
-function DocumentRow({ doc, onDelete, onDownload }: Props) {
+function DocumentRow({doc, onDelete, onDownload}: Props) {
   const typeDetails = getFileTypeDetails(doc.fileType);
   const {user} = useAuthStore();
   const {openModal} = useDocumentStore();
@@ -31,7 +31,6 @@ function DocumentRow({ doc, onDelete, onDownload }: Props) {
   return (
     <>
       <TableRow
-        key={doc.id}
         sx={{'& > *': {borderBottom: "0 !important"}}}
       >
         <TableCell>

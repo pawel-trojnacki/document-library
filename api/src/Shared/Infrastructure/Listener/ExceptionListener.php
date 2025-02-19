@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Shared\Infrastructure\Listener;
 
 use App\Shared\Application\Exception\RuntimeException;
-use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -15,20 +14,21 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 
-#[AsEventListener]
 final class ExceptionListener
 {
+    public function __construct(private string $environment)
+    {
+    }
+
     public function __invoke(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
 
         $response = $this->buildResponse($exception);
-        if ($response !== null) {
-            $event->setResponse($response);
-        }
+        $event->setResponse($response);
     }
 
-    private function buildResponse(\Throwable $e): ?JsonResponse
+    private function buildResponse(\Throwable $e): JsonResponse
     {
         if ($e instanceof NotFoundHttpException) {
             return new JsonResponse(['message' => $e->getMessage()], $e->getStatusCode());
@@ -62,8 +62,10 @@ final class ExceptionListener
             return new JsonResponse(['message' => $e->getMessage()], $e->getCode());
         }
 
-        return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        if ($this->environment === 'prod') {
+            return new JsonResponse(['message' => 'An error occurred'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
-        return null;
+        return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

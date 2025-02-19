@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { FileType, FileTypeDetails, User } from "./types";
+import {FileType, FileTypeDetails, User, UserRole} from "./types";
 
 export function getUserFromToken(token: string): User {
   return jwtDecode(token);
@@ -30,4 +30,13 @@ export async function downloadFile(response: Response, name: string): Promise<vo
 
   window.URL.revokeObjectURL(url);
   document.body.removeChild(a);
+}
+
+export function userRoleVerbose(role: UserRole): string {
+  switch (role) {
+    case "ROLE_ADMIN":
+      return "Admin";
+    case "ROLE_USER":
+        return "User";
+  }
 }
