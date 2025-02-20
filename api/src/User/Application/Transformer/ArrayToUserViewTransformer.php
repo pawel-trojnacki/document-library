@@ -12,7 +12,8 @@ final class ArrayToUserViewTransformer
      * @param array{
      *     id: string,
      *     createdAt: string,
-     *     name: string,
+     *     firstName: string,
+     *     lastName: string,
      *     email: string,
      *     role: string,
      * } $data
@@ -22,7 +23,8 @@ final class ArrayToUserViewTransformer
         return new UserView(
             id: $data['id'],
             createdAt: $data['createdAt'],
-            name: $data['name'],
+            firstName: $data['firstName'],
+            lastName: $data['lastName'],
             email: $data['email'],
             role: $data['role'],
         );

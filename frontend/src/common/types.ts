@@ -24,7 +24,8 @@ export type ChangePasswordPayload = {
 export type UserDto = {
   id: string;
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   role: UserRole;
   createdAt: string;
 }

@@ -32,7 +32,8 @@ class GetUsersActionTest extends KernelTestCase
             ->assertSuccessful()
             ->assertJsonMatches('total', 3)
             ->assertJsonMatches('items[0].email', 'johndoe@email.com')
-            ->assertJsonMatches('items[0].name', 'John Doe')
+            ->assertJsonMatches('items[0].firstName', 'John')
+            ->assertJsonMatches('items[0].lastName', 'Doe')
             ->assertJsonMatches('items[0].role', UserRole::ADMIN->value)
         ;
     }
