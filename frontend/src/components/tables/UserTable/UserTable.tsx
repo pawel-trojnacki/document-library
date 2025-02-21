@@ -1,4 +1,4 @@
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Alert,
   Box,
@@ -9,20 +9,20 @@ import {
   TableBody,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
 } from "@mui/material";
 import toast from "react-hot-toast";
 import UserService from "../../../service/UserService.ts";
 import UserRow from "./UserRow.tsx";
 import FloatingActionButton from "../../ui/FloatingActionButton.tsx";
 import UserForm from "../../forms/UserForm.tsx";
-import {useUserStore} from "../../../store/userStore.ts";
+import { useUserStore } from "../../../store/userStore.ts";
 
 function UserTable() {
-  const {openModal} = useUserStore();
+  const { openModal } = useUserStore();
   const queryClient = useQueryClient();
 
-  const {data, isLoading, error} = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["users"],
     queryFn: UserService.getUsers,
   });
@@ -30,28 +30,29 @@ function UserTable() {
   const deleteUserMutation = useMutation({
     mutationFn: UserService.deleteUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["users"]});
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success("User deleted");
     },
     onError: (error) => {
       toast.error(error.message);
-    }
+    },
   });
 
   const handleDelete = (id: string) => {
     const confirmation = window.confirm("Are you sure you want to delete this user?");
-    if(confirmation) {
+    if (confirmation) {
       deleteUserMutation.mutate(id);
     }
-  }
+  };
 
-  if (isLoading) return (
-    <Box>
-      <CircularProgress />
-    </Box>
-  )
+  if (isLoading)
+    return (
+      <Box>
+        <CircularProgress />
+      </Box>
+    );
 
-  if (error) return <Alert severity="error">{error.message}</Alert>
+  if (error) return <Alert severity="error">{error.message}</Alert>;
 
   return (
     <>
@@ -76,7 +77,7 @@ function UserTable() {
       <FloatingActionButton ariaLabel="Create user" onClick={() => openModal(null)} />
       <UserForm />
     </>
-  )
+  );
 }
 
 export default UserTable;

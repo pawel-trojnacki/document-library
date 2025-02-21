@@ -1,12 +1,12 @@
-import {Fab} from "@mui/material";
-import {Add as AddIcon} from "@mui/icons-material";
+import { Fab } from "@mui/material";
+import { Add as AddIcon } from "@mui/icons-material";
 
 type Props = {
   ariaLabel: string;
   onClick: () => void;
-}
+};
 
-function FloatingActionButton({ariaLabel, onClick}: Props) {
+function FloatingActionButton({ ariaLabel, onClick }: Props) {
   return (
     <Fab
       onClick={onClick}
@@ -20,7 +20,7 @@ function FloatingActionButton({ariaLabel, onClick}: Props) {
     >
       <AddIcon />
     </Fab>
-  )
+  );
 }
 
 export default FloatingActionButton;

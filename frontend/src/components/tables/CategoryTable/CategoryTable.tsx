@@ -1,5 +1,5 @@
-import {useState} from "react";
-import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import {
   Alert,
@@ -24,7 +24,7 @@ function CategoryTable() {
 
   const queryClient = useQueryClient();
 
-  const {data, isLoading, error} = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["categories"],
     queryFn: CategoryService.getCategories,
   });
@@ -32,28 +32,29 @@ function CategoryTable() {
   const deleteCategoryMutation = useMutation({
     mutationFn: CategoryService.deleteCategory,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["categories"]});
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast.success("Category deleted");
     },
     onError: (error) => {
       toast.error(error.message);
-    }
+    },
   });
 
   const handleDelete = (id: string) => {
     const confirmation = window.confirm("Are you sure you want to delete this category?");
-    if(confirmation) {
+    if (confirmation) {
       deleteCategoryMutation.mutate(id);
     }
-  }
+  };
 
-  if (isLoading) return (
-    <Box>
-      <CircularProgress />
-    </Box>
-  )
+  if (isLoading)
+    return (
+      <Box>
+        <CircularProgress />
+      </Box>
+    );
 
-  if (error) return <Alert severity="error">{error.message}</Alert>
+  if (error) return <Alert severity="error">{error.message}</Alert>;
 
   return (
     <>
@@ -69,7 +70,7 @@ function CategoryTable() {
             {data?.items.map((category) => (
               <TableRow
                 key={category.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   {category.name}
@@ -91,17 +92,12 @@ function CategoryTable() {
         </Table>
       </TableContainer>
       <FloatingActionButton ariaLabel="Create category" onClick={() => setModalOpen(true)} />
-      <CategoryForm
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-      />
-      <Backdrop
-        open={deleteCategoryMutation.isPending}
-      >
-        <CircularProgress sx={{color: "#FFF"}} />
+      <CategoryForm isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      <Backdrop open={deleteCategoryMutation.isPending}>
+        <CircularProgress sx={{ color: "#FFF" }} />
       </Backdrop>
     </>
-  )
+  );
 }
 
 export default CategoryTable;

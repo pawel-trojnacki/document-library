@@ -1,7 +1,7 @@
-import {create} from "zustand";
-import {persist} from "zustand/middleware";
-import {User} from "../common/types.ts";
-import {getUserFromToken} from "../common/functions.ts";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { User } from "../common/types.ts";
+import { getUserFromToken } from "../common/functions.ts";
 
 type AuthStore = {
   user: User | null;
@@ -9,7 +9,7 @@ type AuthStore = {
   refreshToken: string | null;
   login: (token: string, refreshToken: string) => void;
   logout: () => void;
-}
+};
 
 export const useAuthStore = create<AuthStore>()(
   persist(
@@ -19,9 +19,9 @@ export const useAuthStore = create<AuthStore>()(
       refreshToken: null,
       login: (token: string, refreshToken: string) => {
         const user = getUserFromToken(token);
-        set({token, refreshToken, user});
+        set({ token, refreshToken, user });
       },
-      logout: () => set({user: null, token: null, refreshToken: null}),
+      logout: () => set({ user: null, token: null, refreshToken: null }),
     }),
     {
       name: "auth-store",

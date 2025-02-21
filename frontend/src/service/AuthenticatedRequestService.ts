@@ -7,7 +7,7 @@ abstract class AuthenticatedRequestService {
     body?: any,
     contentType: string | null = "application/json",
     allowRefreshToken: boolean = true,
-    returnRaw: boolean = false,
+    returnRaw: boolean = false
   ): Promise<T> {
     const token = useAuthStore.getState().token;
 
@@ -19,10 +19,10 @@ abstract class AuthenticatedRequestService {
       method,
       headers: {
         Authorization: `Bearer ${token}`,
-        ...(contentType !== null && {"Content-Type": contentType}),
+        ...(contentType !== null && { "Content-Type": contentType }),
       },
       body: undefined,
-    }
+    };
 
     if (body) {
       params.body = contentType === "application/json" ? JSON.stringify(body) : body;
@@ -41,7 +41,7 @@ abstract class AuthenticatedRequestService {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({refresh_token: refreshToken}),
+        body: JSON.stringify({ refresh_token: refreshToken }),
       });
 
       if (!refreshResponse.ok) {
@@ -52,7 +52,14 @@ abstract class AuthenticatedRequestService {
       const refreshData = await refreshResponse.json();
       useAuthStore.getState().login(refreshData.token, refreshData.refresh_token);
 
-      return AuthenticatedRequestService.makeRequest(method, url, body, contentType, false, returnRaw);
+      return AuthenticatedRequestService.makeRequest(
+        method,
+        url,
+        body,
+        contentType,
+        false,
+        returnRaw
+      );
     }
 
     const errorResponse = await response.json();

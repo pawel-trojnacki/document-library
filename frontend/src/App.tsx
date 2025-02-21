@@ -2,9 +2,9 @@ import { BrowserRouter, Outlet, Route, Routes, Navigate } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "react-hot-toast";
-import CssBaseline from '@mui/material/CssBaseline';
-import {createTheme, ThemeProvider} from "@mui/material";
-import {blue, deepPurple} from "@mui/material/colors";
+import CssBaseline from "@mui/material/CssBaseline";
+import { createTheme, ThemeProvider } from "@mui/material";
+import { blue, deepPurple } from "@mui/material/colors";
 import { useAuthStore } from "./store/authStore.ts";
 import Navbar from "./components/layout/Navbar.tsx";
 import Documents from "./views/Documents.tsx";
@@ -18,7 +18,7 @@ const theme = createTheme({
     primary: deepPurple,
     secondary: blue,
   },
-})
+});
 
 function AuthenticatedLayout() {
   const { user } = useAuthStore();
@@ -32,7 +32,7 @@ function AuthenticatedLayout() {
       <Navbar />
       <Outlet />
     </div>
-  )
+  );
 }
 
 function App() {
@@ -58,7 +58,7 @@ function App() {
         </ThemeProvider>
       </HelmetProvider>
     </QueryClientProvider>
-  )
+  );
 }
 
 export default App;

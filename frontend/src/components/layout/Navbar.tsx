@@ -10,7 +10,7 @@ import {
   MenuItem,
   Button,
   Container,
-  Tooltip
+  Tooltip,
 } from "@mui/material";
 import { AccountCircle, Menu as MenuIcon } from "@mui/icons-material";
 import { useAuthStore } from "../../store/authStore.ts";
@@ -27,13 +27,13 @@ const pages = [
 ];
 
 function Navbar() {
-  const {user, logout} = useAuthStore();
+  const { user, logout } = useAuthStore();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate("/login");
-  }
+  };
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -101,7 +101,7 @@ function Navbar() {
                 onClose={handleCloseNavMenu}
                 sx={{ display: { xs: "block", md: "none" } }}
               >
-                {pages.map(({name, url}) => (
+                {pages.map(({ name, url }) => (
                   <MenuItem key={url} onClick={handleCloseNavMenu} component={RouterLink} to={url}>
                     <Typography sx={{ textAlign: "center" }}>{name}</Typography>
                   </MenuItem>
@@ -126,17 +126,18 @@ function Navbar() {
             Document Library
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {user?.isAdmin && pages.map(({name, url}) => (
-              <Button
-                key={url}
-                onClick={handleCloseNavMenu}
-                component={RouterLink}
-                to={url}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {name}
-              </Button>
-            ))}
+            {user?.isAdmin &&
+              pages.map(({ name, url }) => (
+                <Button
+                  key={url}
+                  onClick={handleCloseNavMenu}
+                  component={RouterLink}
+                  to={url}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {name}
+                </Button>
+              ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open current user account">

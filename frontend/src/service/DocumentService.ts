@@ -1,13 +1,13 @@
 import AuthenticatedRequestService from "./AuthenticatedRequestService";
-import {Document, DocumentPayload} from "../common/types";
+import { Document, DocumentPayload } from "../common/types";
 
 class DocumentService extends AuthenticatedRequestService {
   public static async getDocuments(
     limit: number,
     from: number,
     categoryId: string | null = null,
-    search: string | null = null,
-  ): Promise<{total: number, items: Document[]}> {
+    search: string | null = null
+  ): Promise<{ total: number; items: Document[] }> {
     let params = `limit=${limit}&from=${from}`;
     if (categoryId) {
       params += `&categoryId=${categoryId}`;
@@ -16,7 +16,10 @@ class DocumentService extends AuthenticatedRequestService {
       params += `&search=${search}`;
     }
 
-    return await DocumentService.makeRequest<{total: number, items: Document[]}>("GET", `documents?${params}`);
+    return await DocumentService.makeRequest<{ total: number; items: Document[] }>(
+      "GET",
+      `documents?${params}`
+    );
   }
 
   public static async downloadFile(id: string): Promise<Response> {
@@ -26,7 +29,7 @@ class DocumentService extends AuthenticatedRequestService {
       null,
       "application/octet-stream",
       true,
-      true,
+      true
     );
   }
 

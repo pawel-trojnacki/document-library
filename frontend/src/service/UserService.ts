@@ -1,8 +1,8 @@
 import AuthenticatedRequestService from "./AuthenticatedRequestService.ts";
-import {ChangePasswordPayload, UserDto, UserPayload} from "../common/types.ts";
+import { ChangePasswordPayload, UserDto, UserPayload } from "../common/types.ts";
 
 class UserService extends AuthenticatedRequestService {
-  public static async getUsers(): Promise<{total: number, items: UserDto[]}> {
+  public static async getUsers(): Promise<{ total: number; items: UserDto[] }> {
     return await UserService.makeRequest("GET", "users");
   }
 

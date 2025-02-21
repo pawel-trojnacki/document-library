@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import { useEffect } from "react";
 import {
   Box,
   Button,
@@ -9,14 +9,14 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  TextField
+  TextField,
 } from "@mui/material";
-import {Controller, SubmitHandler, useForm} from "react-hook-form";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import {UserPayload} from "../../common/types.ts";
+import { UserPayload } from "../../common/types.ts";
 import UserService from "../../service/UserService.ts";
-import {useUserStore} from "../../store/userStore.ts";
+import { useUserStore } from "../../store/userStore.ts";
 
 const defaultValues: UserPayload = {
   email: "",
@@ -24,12 +24,12 @@ const defaultValues: UserPayload = {
   lastName: "",
   role: "ROLE_USER",
   password: "",
-}
+};
 
 function UserForm() {
-  const {user, isModalOpen, closeModal} = useUserStore();
+  const { user, isModalOpen, closeModal } = useUserStore();
 
-  const { control, handleSubmit, reset } = useForm<UserPayload>({defaultValues});
+  const { control, handleSubmit, reset } = useForm<UserPayload>({ defaultValues });
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -46,7 +46,7 @@ function UserForm() {
     }
   }, [user, reset]);
 
-  const {mutate, isPending} = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async ({ id, data }: { id: string | null; data: UserPayload }) => {
       if (id) {
         return UserService.editUser(id, data);
@@ -57,26 +57,22 @@ function UserForm() {
     onSuccess: () => {
       reset();
       closeModal();
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success(document ? "User updated" : "User created");
     },
     onError: (error) => {
       toast.error(error.message);
-    }
+    },
   });
 
   const onSubmit: SubmitHandler<UserPayload> = (data) => {
-      mutate({id: user?.id ?? null, data});
-  }
+    mutate({ id: user?.id ?? null, data });
+  };
 
   return (
-    <Dialog
-      open={isModalOpen}
-      onClose={closeModal}
-      maxWidth="md"
-    >
+    <Dialog open={isModalOpen} onClose={closeModal} maxWidth="md">
       <DialogTitle>{document ? "Edit user" : "Create user"}</DialogTitle>
-      <DialogContent sx={{minWidth: "500px"}}>
+      <DialogContent sx={{ minWidth: "500px" }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Box sx={{ pb: 2, pt: 1 }}>
             <Controller
@@ -89,7 +85,7 @@ function UserForm() {
                   message: "Invalid email address",
                 },
               }}
-              render={({field: { onChange, value }, fieldState: { error }}) => (
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
                   helperText={error ? error.message : null}
                   type="email"
@@ -116,7 +112,7 @@ function UserForm() {
                   message: "First name must be at least 2 characters long",
                 },
               }}
-              render={({field: { onChange, value }, fieldState: { error }}) => (
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
                   helperText={error ? error.message : null}
                   type="text"
@@ -143,7 +139,7 @@ function UserForm() {
                   message: "Last name must be at least 2 characters long",
                 },
               }}
-              render={({field: { onChange, value }, fieldState: { error }}) => (
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
                   helperText={error ? error.message : null}
                   type="text"
@@ -165,7 +161,7 @@ function UserForm() {
               <Controller
                 name="role"
                 control={control}
-                render={({field: { onChange, value }}) => (
+                render={({ field: { onChange, value } }) => (
                   <Select
                     size="small"
                     onChange={onChange}
@@ -178,9 +174,7 @@ function UserForm() {
                     <MenuItem value="ROLE_ADMIN">Admin</MenuItem>
                   </Select>
                 )}
-              >
-
-              </Controller>
+              ></Controller>
             </FormControl>
           </Box>
           {!user && (
@@ -195,7 +189,7 @@ function UserForm() {
                     message: "Password must be at least 8 characters long",
                   },
                 }}
-                render={({field: { onChange, value }, fieldState: { error }}) => (
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
                   <TextField
                     helperText={error ? error.message : null}
                     type="password"
@@ -212,17 +206,13 @@ function UserForm() {
               />
             </Box>
           )}
-          <Button
-            variant="contained"
-            type="submit"
-            loading={isPending}
-          >
+          <Button variant="contained" type="submit" loading={isPending}>
             Save
           </Button>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 export default UserForm;

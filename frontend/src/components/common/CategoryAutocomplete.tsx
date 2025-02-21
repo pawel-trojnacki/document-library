@@ -1,6 +1,6 @@
-import {useMemo} from "react";
-import {useQuery} from "@tanstack/react-query";
-import {Autocomplete, TextField} from "@mui/material";
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Autocomplete, TextField } from "@mui/material";
 import CategoryService from "../../service/CategoryService.ts";
 
 type Props = {
@@ -11,8 +11,8 @@ type Props = {
   disabled?: boolean;
 };
 
-function CategoryAutocomplete({value, onChange, label, width, disabled}: Props) {
-  const {data, isLoading} = useQuery({
+function CategoryAutocomplete({ value, onChange, label, width, disabled }: Props) {
+  const { data, isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: CategoryService.getCategories,
   });
@@ -28,15 +28,9 @@ function CategoryAutocomplete({value, onChange, label, width, disabled}: Props) 
       value={categoryOptions.find((cat) => cat.id === value) || null}
       onChange={(_, newValue) => onChange(newValue ? newValue.id : null)}
       loading={isLoading}
-      sx={{width: width ?? "100%"}}
+      sx={{ width: width ?? "100%" }}
       disabled={disabled ?? false}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          size="small"
-          label={label ?? "Category"}
-        />
-      )}
+      renderInput={(params) => <TextField {...params} size="small" label={label ?? "Category"} />}
     />
   );
 }

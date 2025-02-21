@@ -1,5 +1,5 @@
-import {useInfiniteQuery, useMutation, useQueryClient} from "@tanstack/react-query";
-import {useSearchParams} from "react-router";
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "react-router";
 import {
   Alert,
   Backdrop,
@@ -20,18 +20,18 @@ import DocumentRow from "./DocumentRow.tsx";
 import DocumentFilters from "./DocumentFilters.tsx";
 import FloatingActionButton from "../../ui/FloatingActionButton.tsx";
 import DocumentForm from "../../forms/DocumentForm.tsx";
-import {useAuthStore} from "../../../store/authStore.ts";
-import {useDocumentStore} from "../../../store/documentStore.ts";
-import {downloadFile} from "../../../common/functions.ts";
+import { useAuthStore } from "../../../store/authStore.ts";
+import { useDocumentStore } from "../../../store/documentStore.ts";
+import { downloadFile } from "../../../common/functions.ts";
 
 function DocumentTable() {
-  const {user} = useAuthStore();
-  const {openModal} = useDocumentStore();
+  const { user } = useAuthStore();
+  const { openModal } = useDocumentStore();
   const queryClient = useQueryClient();
 
   const [searchParams] = useSearchParams();
 
-  const fetchDocuments = async ({pageParam = 0}) => {
+  const fetchDocuments = async ({ pageParam = 0 }) => {
     const perPageParam = searchParams.get("perPage");
     const perPageRaw = perPageParam ? parseInt(perPageParam) : NaN;
     const perPage = Number.isInteger(perPageRaw) ? perPageRaw : 20;
@@ -39,44 +39,42 @@ function DocumentTable() {
     const search = searchParams.get("search");
 
     return await DocumentService.getDocuments(perPage, pageParam, categoryId, search);
-  }
+  };
 
-  const {
-    data,
-    isLoading,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    initialData: undefined,
-    initialPageParam: 0,
-    queryKey: ["documents", searchParams.get("categoryId") || "", searchParams.get("search") || ""],
-    queryFn: fetchDocuments,
-    getNextPageParam: (lastPage, allPages) => {
-      const total = lastPage.total;
-      const currentCount = allPages.flatMap((page) => page.items).length;
-      return currentCount < total ? currentCount : undefined;
-    }
-  });
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      initialData: undefined,
+      initialPageParam: 0,
+      queryKey: [
+        "documents",
+        searchParams.get("categoryId") || "",
+        searchParams.get("search") || "",
+      ],
+      queryFn: fetchDocuments,
+      getNextPageParam: (lastPage, allPages) => {
+        const total = lastPage.total;
+        const currentCount = allPages.flatMap((page) => page.items).length;
+        return currentCount < total ? currentCount : undefined;
+      },
+    });
 
   const deleteDocumentMutation = useMutation({
     mutationFn: DocumentService.deleteDocument,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["documents"]});
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
       toast.success("Document deleted");
     },
     onError: (error) => {
       toast.error(error.message);
-    }
+    },
   });
 
   const handleDelete = (id: string) => {
     const confirmation = window.confirm("Are you sure you want to delete this document?");
-    if(confirmation) {
+    if (confirmation) {
       deleteDocumentMutation.mutate(id);
     }
-  }
+  };
 
   const handleDownload = async (id: string, filename: string) => {
     try {
@@ -89,24 +87,25 @@ function DocumentTable() {
         toast.error("Couldn't download file");
       }
     }
-  }
+  };
 
-  if (isLoading) return (
-    <Box>
-      <CircularProgress />
-    </Box>
-  )
+  if (isLoading)
+    return (
+      <Box>
+        <CircularProgress />
+      </Box>
+    );
 
-  if (error) return <Alert severity="error">{error.message}</Alert>
+  if (error) return <Alert severity="error">{error.message}</Alert>;
 
   return (
     <>
       <DocumentFilters />
       <TableContainer component={Paper}>
-        <Table sx={{minWidth: 650}}>
+        <Table sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
-              <TableCell sx={{width: "50px"}} />
+              <TableCell sx={{ width: "50px" }} />
               <TableCell>Name</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Author</TableCell>
@@ -128,9 +127,7 @@ function DocumentTable() {
               )
             ) : (
               <TableRow>
-                <TableCell colSpan={4}>
-                  No documents found.
-                </TableCell>
+                <TableCell colSpan={4}>No documents found.</TableCell>
               </TableRow>
             )}
           </TableBody>
@@ -141,7 +138,7 @@ function DocumentTable() {
           onClick={() => fetchNextPage()}
           loading={isFetchingNextPage}
           variant="outlined"
-          sx={{mt: 3}}
+          sx={{ mt: 3 }}
         >
           Load more
         </Button>
@@ -152,13 +149,11 @@ function DocumentTable() {
           <DocumentForm />
         </>
       )}
-      <Backdrop
-        open={deleteDocumentMutation.isPending}
-      >
-        <CircularProgress sx={{color: "#FFF"}} />
+      <Backdrop open={deleteDocumentMutation.isPending}>
+        <CircularProgress sx={{ color: "#FFF" }} />
       </Backdrop>
     </>
-  )
+  );
 }
 
 export default DocumentTable;

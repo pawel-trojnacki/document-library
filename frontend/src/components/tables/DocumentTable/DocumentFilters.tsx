@@ -1,7 +1,7 @@
-import {ChangeEvent, FormEvent, useState} from "react";
-import {useSearchParams} from "react-router";
-import {Box, Button, TextField} from "@mui/material";
-import {Clear as ClearIcon, Search as SearchIcon} from "@mui/icons-material";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { useSearchParams } from "react-router";
+import { Box, Button, TextField } from "@mui/material";
+import { Clear as ClearIcon, Search as SearchIcon } from "@mui/icons-material";
 import CategoryAutocomplete from "../../common/CategoryAutocomplete.tsx";
 
 function DocumentFilters() {
@@ -14,7 +14,7 @@ function DocumentFilters() {
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-  }
+  };
 
   const applyFilters = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,20 +22,18 @@ function DocumentFilters() {
       search: searchQuery,
       categoryId: selectedCategoryId ?? "",
     });
-  }
+  };
 
   const resetFilters = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSearchQuery("");
     setSelectedCategoryId(null);
-    setSearchParams({search: "", categoryId: ""});
-  }
+    setSearchParams({ search: "", categoryId: "" });
+  };
 
   return (
     <form onSubmit={applyFilters} onReset={resetFilters}>
-      <Box
-        sx={{display: "flex", flexWrap: "wrap", gap: 2, mb: 3}}
-      >
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, mb: 3 }}>
         <TextField
           name="search"
           label="Search documents"
@@ -45,26 +43,20 @@ function DocumentFilters() {
           value={searchQuery}
           onChange={handleSearchChange}
         />
-        <CategoryAutocomplete value={selectedCategoryId} onChange={setSelectedCategoryId} width={240} />
-        <Button
-          variant="contained"
-          size="small"
-          type="submit"
-          startIcon={<SearchIcon />}
-        >
+        <CategoryAutocomplete
+          value={selectedCategoryId}
+          onChange={setSelectedCategoryId}
+          width={240}
+        />
+        <Button variant="contained" size="small" type="submit" startIcon={<SearchIcon />}>
           Search
         </Button>
-        <Button
-          variant="outlined"
-          size="small"
-          type="reset"
-          startIcon={<ClearIcon />}
-        >
+        <Button variant="outlined" size="small" type="reset" startIcon={<ClearIcon />}>
           Reset
         </Button>
       </Box>
     </form>
-  )
+  );
 }
 
 export default DocumentFilters;

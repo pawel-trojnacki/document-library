@@ -1,6 +1,6 @@
-import {useState} from "react";
+import { useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
-import { Controller, useForm, SubmitHandler } from 'react-hook-form';
+import { Controller, useForm, SubmitHandler } from "react-hook-form";
 import { useAuthStore } from "../../store/authStore.ts";
 import { useNavigate } from "react-router";
 import AuthService from "../../service/AuthService.ts";
@@ -8,19 +8,19 @@ import AuthService from "../../service/AuthService.ts";
 type FormValues = {
   email: string;
   password: string;
-}
+};
 
 const defaultValues: FormValues = {
   email: "",
   password: "",
-}
+};
 
 function LoginForm() {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { login } = useAuthStore();
   const navigate = useNavigate();
-  const { control, handleSubmit } = useForm<FormValues>({defaultValues});
+  const { control, handleSubmit } = useForm<FormValues>({ defaultValues });
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setError(null);
@@ -30,12 +30,12 @@ function LoginForm() {
       const response = await AuthService.login(data.email, data.password);
       login(response.token, response.refresh_token);
       setLoading(false);
-      navigate("/", {replace: true});
+      navigate("/", { replace: true });
     } catch (e) {
       setError(e instanceof Error ? e.message : "An error occurred");
       setLoading(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -48,7 +48,7 @@ function LoginForm() {
         <Controller
           name="email"
           control={control}
-          render={({field: { onChange, value }, fieldState: { error }}) => (
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
             <TextField
               helperText={error ? error.message : null}
               type="email"
@@ -70,7 +70,7 @@ function LoginForm() {
         <Controller
           name="password"
           control={control}
-          render={({field: { onChange, value }, fieldState: { error }}) => (
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
             <TextField
               helperText={error ? error.message : null}
               type="password"
@@ -88,15 +88,11 @@ function LoginForm() {
           )}
         />
       </Box>
-      <Button
-        variant="contained"
-        type="submit"
-        loading={isLoading}
-      >
+      <Button variant="contained" type="submit" loading={isLoading}>
         Log in
       </Button>
     </form>
-  )
+  );
 }
 
 export default LoginForm;
