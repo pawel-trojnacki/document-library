@@ -48,6 +48,9 @@ function CategoryForm({isOpen, onClose}: Props) {
             <Controller
               name="name"
               control={control}
+              rules={{
+                required: "Category name is required"
+              }}
               render={({field: { onChange, value }, fieldState: { error }}) => (
                 <TextField
                   helperText={error ? error.message : null}

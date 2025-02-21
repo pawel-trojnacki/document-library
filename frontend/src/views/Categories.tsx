@@ -1,15 +1,16 @@
 import Head from "../components/common/Head.tsx";
 import {useAuthStore} from "../store/authStore.ts";
 import CategoryTable from "../components/tables/CategoryTable/CategoryTable.tsx";
-import {useNavigate} from "react-router";
+import {Navigate} from "react-router";
 import {Container, Typography} from "@mui/material";
 
 function Categories() {
-  const navigate = useNavigate();
   const {user} = useAuthStore();
 
   if (!user?.isAdmin) {
-    navigate("/");
+    return (
+      <Navigate to="/" />
+    )
   }
 
   return (

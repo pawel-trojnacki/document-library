@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import { useAuthStore } from "../../store/authStore.ts";
@@ -18,15 +18,9 @@ const defaultValues: FormValues = {
 function LoginForm() {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { login, user } = useAuthStore();
+  const { login } = useAuthStore();
   const navigate = useNavigate();
   const { control, handleSubmit } = useForm<FormValues>({defaultValues});
-
-  useEffect(() => {
-    if (user) {
-      navigate("/", {replace: true});
-    }
-  }, [user, navigate]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setError(null);

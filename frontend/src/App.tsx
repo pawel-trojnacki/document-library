@@ -11,6 +11,7 @@ import Documents from "./views/Documents.tsx";
 import Login from "./views/Login.tsx";
 import Categories from "./views/Categories.tsx";
 import Users from "./views/Users.tsx";
+import Profile from "./views/Profile.tsx";
 
 const theme = createTheme({
   palette: {
@@ -46,6 +47,7 @@ function App() {
             <Routes>
               <Route element={<AuthenticatedLayout />}>
                 <Route index path="/" element={<Documents />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path="/categories" element={<Categories />} />
                 <Route path="/users" element={<Users />} />
               </Route>

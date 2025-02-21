@@ -160,6 +160,9 @@ function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              <MenuItem component={RouterLink} to="/profile">
+                <Typography sx={{ textAlign: "center" }}>Profile</Typography>
+              </MenuItem>
               <MenuItem onClick={handleLogout}>
                 <Typography sx={{ textAlign: "center" }}>Logout</Typography>
               </MenuItem>

@@ -1,7 +1,7 @@
-import {UserDto} from "../../../common/types.ts";
 import {IconButton, TableCell, TableRow, Tooltip} from "@mui/material";
-import {userRoleVerbose} from "../../../common/functions.ts";
 import {Delete as DeleteIcon, Edit as EditIcon} from "@mui/icons-material";
+import {UserDto} from "../../../common/types.ts";
+import {userRoleVerbose} from "../../../common/functions.ts";
 import {useUserStore} from "../../../store/userStore.ts";
 
 type Props = {

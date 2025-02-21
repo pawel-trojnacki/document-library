@@ -11,13 +11,12 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
+import toast from "react-hot-toast";
 import UserService from "../../../service/UserService.ts";
 import UserRow from "./UserRow.tsx";
 import FloatingActionButton from "../../ui/FloatingActionButton.tsx";
 import UserForm from "../../forms/UserForm.tsx";
 import {useUserStore} from "../../../store/userStore.ts";
-import DocumentService from "../../../service/DocumentService.ts";
-import toast from "react-hot-toast";
 
 function UserTable() {
   const {openModal} = useUserStore();
