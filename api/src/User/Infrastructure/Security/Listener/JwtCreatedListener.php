@@ -7,7 +7,7 @@ namespace App\User\Infrastructure\Security\Listener;
 use App\User\Domain\Entity\User;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 
-class JwtCreatedListener
+final class JwtCreatedListener
 {
     public function __invoke(JWTCreatedEvent $event): void
     {

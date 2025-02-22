@@ -39,6 +39,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private string $password;
 
+    #[ORM\Column(type: 'integer', length: 10)]
+    private int $lastPasswordUpdate;
+
     public function __construct(
         Uuid $id,
         UserRole $role,
@@ -54,6 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->password = $password;
+        $this->lastPasswordUpdate = time();
     }
 
     public function getId(): Uuid
@@ -142,6 +146,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): void
     {
         $this->password = $password;
+    }
+
+    public function getLastPasswordUpdate(): int
+    {
+        return $this->lastPasswordUpdate;
+    }
+
+    public function setLastPasswordUpdate(int $lastPasswordUpdate): void
+    {
+        $this->lastPasswordUpdate = $lastPasswordUpdate;
     }
 
     /**

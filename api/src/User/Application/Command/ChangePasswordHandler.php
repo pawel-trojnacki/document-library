@@ -20,6 +20,7 @@ final class ChangePasswordHandler implements CommandHandler
     {
         $user = $command->user;
         $user->setPassword($this->passwordHasher->hash($command->password));
+        $user->setLastPasswordUpdate(time());
         $this->userRepository->save($user);
     }
 }
