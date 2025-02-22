@@ -4,7 +4,7 @@
 
 Document Library is a web application designed for storing and managing documents.
 It allows users to upload documents and search for them by title, description, content extracted from the document etc.
-The project follows basic DDD concepts and implements the CQRS patterns.
+The project follows basic DDD concepts and implements the CQRS pattern.
 
 **This is a learning project and is not production-ready.**
 
